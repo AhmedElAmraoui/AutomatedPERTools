@@ -15,7 +15,7 @@ class PERExperiment:
     - Process results and return for display
     """
     
-    def __init__(self, circuits, inst_map, noise_data_frame, backend = None, processor = None):
+    def __init__(self, circuits, inst_map, noise_data_frame, backend = None, procspec = None):
         """Initializes a PERExperiment with the data that stays constant for all circuits/
         noise strengths/expectation values
 
@@ -36,8 +36,9 @@ class PERExperiment:
         else:
             raise Exception("Unsupported circuit type")
         if not backend:
-            self._processor = processor  
+            self._processor = procspec._processor  
         self.pauli_type = circuit_interface(circuits[0]).pauli_type
+        self.procspec = procspec
 
 
         self.noise_data_frame = noise_data_frame #store noise data
@@ -102,7 +103,8 @@ class PERExperiment:
                 samples,
                 noise_strengths,
                 bases, 
-                expectations
+                expectations,
+                self.procspec
                 )
             self._per_runs.append(per_run)
 

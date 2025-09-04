@@ -29,6 +29,8 @@ class SparsePauliTomographyExperiment:
         subgraph = False
         if len(used_qubits) != backend.num_qubits:
             subgraph = True
+            
+        self.subgraph= subgraph
         
         if circuits[0].__class__.__name__ == "QuantumCircuit":
             circuit_interface = QiskitCircuit
@@ -95,7 +97,7 @@ class SparsePauliTomographyExperiment:
         return self.analysis.noisedataframe
 
     def create_per_experiment(self, circuits : Any) -> PERExperiment:
-        experiment = PERExperiment(circuits, self._inst_map, self.analysis.noisedataframe, backend = None, processor = self._procspec._processor)
+        experiment = PERExperiment(circuits, self._inst_map, self.analysis.noisedataframe, backend = None, procspec = self._procspec)
         return experiment
 
     def save(self):

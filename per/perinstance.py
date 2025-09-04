@@ -12,7 +12,7 @@ class PERInstance(Instance):
         inst_map,
         percirc, 
         meas_basis, 
-        noise_strength):
+        noise_strength, procspec):
         
         self._percirc = percirc #the base circuit to sample from
         self._processor = processor #for transpilation
@@ -20,6 +20,9 @@ class PERInstance(Instance):
         self.meas_basis = meas_basis #measurement basis
         self.pauli_type = percirc._qc.pauli_type
         self._inst_map = inst_map
+        self.procspec = procspec
+        self.subgraph = procspec.subgraph
+        self.used_qubits=procspec.used_qubits
 
         super().__init__(percirc._qc, meas_basis) #call self._instance
 
@@ -42,7 +45,11 @@ class PERInstance(Instance):
         
         circ.measure_all()
         #transpile to reduce unnecessary single-qubit gates
-        self._circ = self._processor.transpile(self._circ, self._inst_map)
+        if self.subgraph:
+            self._circ = self._processor.transpile(self._circ,used_qubits=self.used_qubits)
+        else:
+            self._circ = self._processor.transpile(self._circ, self._inst_map)
+        
 
     def get_adjusted_expectation(self, pauli):
         """Returns the expectation value reported by the parent class, but with the sign

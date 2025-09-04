@@ -16,6 +16,7 @@ class ProcessorSpec:
         self.meas_bases = self._meas_bases()
         self.model_terms = self._model_terms()
         self.used_qubits = used_qubits
+        self.subgraph = processor.subgraph
 
     def _meas_bases(self):
 

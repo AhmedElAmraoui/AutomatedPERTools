@@ -163,7 +163,7 @@ class LayerNoiseData:
             term.to_label(): value
             for term, value in self.noisemodel.coeffs}
             coupling_list = self.layer._procspec._processor.sub_map(self.layer._procspec.inst_map)
-            self.plot_grouped_by_qubit(model_terms, coeffs, coupling_list, title="Fidelity", ylabel= "Coefficients")
+            self.plot_grouped_by_qubit(model_terms, coeffs, coupling_list, title="Model Coefficients", ylabel= "Coefficients")
 
     def graph(self, *links):
         """Graph the fits values for a certain subset of Pauli terms"""
@@ -198,10 +198,10 @@ class LayerNoiseData:
                 infidelities[term] = 1-self._term_data[Pauli(term)].fidelity
             
             coupling_list = self.layer._procspec._processor.sub_map(self.layer._procspec.inst_map)
-            self.plot_grouped_by_qubit(model_terms, infidelities, coupling_list)
+            self.plot_grouped_by_qubit(model_terms, infidelities, coupling_list, title="Infidelity")
             
             
-    def plot_grouped_by_qubit(self, model_terms, coeffs, coupling_list, title="Fidelity", ylabel= "Coefficients"):
+    def plot_grouped_by_qubit(self, model_terms, coeffs, coupling_list, title="Infidelity", ylabel= "Coefficients"):
         """
         Plots measured vs ideal fidelities grouped by qubit or qubit pair,
         sorted alphabetically within groups, with clean Pauli labels and separators.

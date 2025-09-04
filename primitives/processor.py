@@ -51,14 +51,15 @@ class QiskitProcessor(Processor):
                 circuits=circuit.qc,
                 backend=self._qpu,
                 initial_layout=used_qubits,
-                coupling_map=cmap,
                 layout_method='trivial',
+                optimization_level=0,
                 **kwargs
             ))
         else:
             return QiskitCircuit(transpile(
                 circuits=circuit.qc,
                 backend=self._qpu,
+                optimization_level=0,
                 **kwargs
             ))
 

@@ -3,7 +3,7 @@ from per.perdata import PERData
 
 
 class PERRun:
-    def __init__(self, processor, inst_map, per_circ, samples, noise_strengths, meas_bases, expectations):
+    def __init__(self, processor, inst_map, per_circ, samples, noise_strengths, meas_bases, expectations, procspec):
         self._per_circ = per_circ
         self._pauli_type = per_circ._qc.pauli_type
         self._noise_strengths = noise_strengths
@@ -12,6 +12,7 @@ class PERRun:
         self._meas_bases = meas_bases
         self._expectations = expectations
         self._inst_map = inst_map
+        self.procspec = procspec
 
         self._generate()
 
@@ -21,7 +22,7 @@ class PERRun:
         for basis in self._meas_bases:
             for lmbda in self._noise_strengths:
                 for sample in range(self._samples):
-                    perinst = PERInstance(self._proc, self._inst_map, self._per_circ, basis, lmbda)
+                    perinst = PERInstance(self._proc, self._inst_map, self._per_circ, basis, lmbda, self.procspec)
                     self.instances.append(perinst)
     
     def _get_spam(self, pauli):
