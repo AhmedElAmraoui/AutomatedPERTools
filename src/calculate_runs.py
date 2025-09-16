@@ -39,7 +39,7 @@ def count_tomography_runs_from_repo(
     Ermittelt:
       - #Layer:   aus PERCircuit(qc)._layers (eindeutige cliff_layer)
       - Single-Bases je Layer: via LayerLearning._single_bases()
-      - num_meas_bases: fest = 9 (deine Vorgabe)
+      - num_meas_bases: fest = 9
 
     Args:
         qc: Qiskit QuantumCircuit oder primitives.Circuit
@@ -61,7 +61,7 @@ def count_tomography_runs_from_repo(
     circ_wrap = _wrap_circuit(qc)
     per_circ = PERCircuit(circ_wrap)
 
-    # Menge eindeutiger Clifford-Layer ermitteln (wie in deinem Snippet)
+    # Menge eindeutiger Clifford-Layer ermitteln
     profiles = set()
     for layer in per_circ._layers:
         try:
@@ -83,7 +83,6 @@ def count_tomography_runs_from_repo(
         ll._single_bases()  # befüllt ll.single_bases
         single_bases_counts.append(len(ll.single_bases))
 
-    # 4) Zählung gemäß deiner Spezifikation
     num_meas_bases = 9  # festgelegt
     depth_count = sum(1 for _ in depths)
 

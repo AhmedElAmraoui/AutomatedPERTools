@@ -1,0 +1,131 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{picture,xcolor}
+\geometry{left=2cm,right=2cm, top=2cm, bottom=2cm, bindingoffset=5mm, headheight=2.5cm, headsep=0.5cm}
+
+\usepackage[ngerman]{babel}
+\usepackage{mathtools}
+\usepackage{yfonts}
+\usepackage{amsmath, times,amsthm}
+\usepackage{amssymb}
+
+\usepackage{fancyhdr}
+
+\fancypagestyle{style1}{
+	\fancyhead{}
+	\fancyhead[L]{\includegraphics[height=1cm]{UdS-Logo.png}}
+	\fancyhead[R]{\textbf{}}
+	\fancyfoot[L]{s}
+	\renewcommand{\headrulewidth}{2pt}
+}
+
+
+\begin{document}
+	\section{Sparse Pauli Tomography}
+	
+	% --- Sparse Pauli Tomography ---
+	\[
+	N_{\mathrm{tomo}}
+	= N_{\mathrm{layers}} \cdot \bigl( 9 \cdot |D| \cdot S \bigr)
+	+ \sum_{\ell=1}^{N_{\mathrm{layers}}} 
+	\Bigl( \, \lvert \text{single\_bases}(\ell) \rvert \cdot S_{\mathrm{single}} \Bigr)
+	\]
+	
+	\begin{align*}
+		&N_{\mathrm{layers}} && \text{= Anzahl der Clifford-Layer im Circuit} \\
+		&9 && \text{= feste Zahl der Messbasen} \\
+		&|D| && \text{= Anzahl der Tiefenwerte (z.\,B. [2,4,16,32,64])} \\
+		&S && \text{= Samples (Twirls pro Basis)} \\
+		&|\text{single\_bases}(\ell)| && \text{= Zahl der Single-Bases für Layer $\ell$} \\
+		&S_{\mathrm{single}} && \text{= Samples für die Single-Bases}
+	\end{align*}
+	
+	\section{PER} 
+	% --- PER ---
+	\[
+	N_{\mathrm{PER}}
+	= N_{\mathrm{input}} \cdot N_{\mathrm{meas\_bases}}^{\mathrm{PER}} \cdot |N_{\mathrm{strengths}}| \cdot S
+	\]
+	
+	\begin{align*}
+		&N_{\mathrm{input}} && \text{= Anzahl der Eingabecircuits} \\
+		&N_{\mathrm{meas\_bases}}^{\mathrm{PER}} && \text{= minimale Zahl Messbasen, die \texttt{pauli\_list} abdeckt} \\
+		&|N_{\mathrm{strengths}}| && \text{= Anzahl der verschiedenen Noise-Stärken} \\
+		&S && \text{= Samples (Twirls pro Basis)}
+	\end{align*}
+
+
+\section{Beispiel}
+
+\[
+N_{\mathrm{tomo}}
+= N_{\mathrm{layers}} \cdot \bigl( 9 \cdot |D| \cdot S \bigr)
++ \sum_{\ell=1}^{N_{\mathrm{layers}}} \Bigl( \lvert \text{single\_bases}(\ell) \rvert \cdot S_{\mathrm{single}} \Bigr)
+\]
+
+\[
+\text{Setze } |D|=5,\; S=100,\; S_{\mathrm{single}}=250:
+\quad
+N_{\mathrm{tomo}}
+= N_{\mathrm{layers}} \cdot \bigl( 9 \cdot 5 \cdot 100 \bigr)
++ \sum_{\ell=1}^{N_{\mathrm{layers}}} \Bigl( \lvert \text{single\_bases}(\ell) \rvert \cdot 250 \Bigr)
+\]
+
+\[
+N_{\mathrm{tomo}}
+= N_{\mathrm{layers}} \cdot 4500
++ 250 \cdot \sum_{\ell=1}^{N_{\mathrm{layers}}} \lvert \text{single\_bases}(\ell) \rvert
+\]
+
+\[
+\text{Mit } L := N_{\mathrm{layers}},\; S_{\Sigma} := \sum_{\ell=1}^{L} \lvert \text{single\_bases}(\ell) \rvert
+\quad\Rightarrow\quad
+N_{\mathrm{tomo}} = 4500\,L \;+\; 250\,S_{\Sigma}
+\]
+
+
+\text{Backend-Runs (mit shots = 1024):}
+\[
+N_{\mathrm{tomo}}^{\mathrm{runs}}
+= 1024 \cdot N_{\mathrm{tomo}}
+= 1024 \cdot (4500\,L + 250\,S_{\Sigma})
+= 4{,}608{,}000\,L \;+\; 256{,}000\,S_{\Sigma}.
+\]
+
+
+% =======================
+% 2) PER (Probabilistic Error Reduction)
+% =======================
+\[
+N_{\mathrm{PER}}
+= N_{\mathrm{input}} \cdot N_{\mathrm{meas\_bases}}^{\mathrm{PER}} \cdot |N_{\mathrm{strengths}}| \cdot S
+\]
+
+\[
+\text{Setze } N_{\mathrm{input}}=1,\; |N_{\mathrm{strengths}}|=3,\; S=1000:
+\quad
+N_{\mathrm{PER}} = 1 \cdot N_{\mathrm{meas\_bases}}^{\mathrm{PER}} \cdot 3 \cdot 1000
+= 3000 \cdot N_{\mathrm{meas\_bases}}^{\mathrm{PER}}
+\]
+
+\[
+\text{Mit } M_{\mathrm{PER}} := N_{\mathrm{meas\_bases}}^{\mathrm{PER}}
+\quad\Rightarrow\quad
+N_{\mathrm{PER}} = 3000\,M_{\mathrm{PER}}.
+\]
+
+\[
+\text{Backend-Runs (mit shots = 1024):}\qquad
+N_{\mathrm{PER}}^{\mathrm{runs}}
+= 1024 \cdot N_{\mathrm{PER}}
+= 1024 \cdot 3000\,M_{\mathrm{PER}}
+= 3{,}072{,}000\,M_{\mathrm{PER}}.
+\]	
+	
+\end{document}

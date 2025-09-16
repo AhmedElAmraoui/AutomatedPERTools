@@ -1,3 +1,10 @@
-2025-09-04 11:34:46,131 Retrying (PostForcelistRetry(total=4, connect=2, read=None, redirect=None, status=None)) after connection broken by 'NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000020903FA8700>: Failed to resolve 'auth.quantum.ibm.com' ([Errno 11001] getaddrinfo failed)")': /api/version
-2025-09-04 11:34:47,145 Retrying (PostForcelistRetry(total=3, connect=1, read=None, redirect=None, status=None)) after connection broken by 'NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000020903FAABF0>: Failed to resolve 'auth.quantum.ibm.com' ([Errno 11001] getaddrinfo failed)")': /api/version
-2025-09-04 11:34:49,145 Retrying (PostForcelistRetry(total=2, connect=0, read=None, redirect=None, status=None)) after connection broken by 'NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000020903FA8850>: Failed to resolve 'auth.quantum.ibm.com' ([Errno 11001] getaddrinfo failed)")': /api/version
+2025-09-16 12:32:57,165 Created pauli bases
+2025-09-16 12:32:57,165 ['XXXX', 'YXYX', 'ZXZX', 'XYXY', 'YYYY', 'ZYZY', 'XZXZ', 'YZYZ', 'ZZZZ']
+2025-09-16 12:32:57,165 Created model with the following terms:
+2025-09-16 12:32:57,165 {'IIXI', 'XYII', 'ZZII', 'YIII', 'IXYI', 'IZXI', 'YZII', 'IIIY', 'XIII', 'IIIX', 'IIXY', 'IIZY', 'IIXZ', 'IIZZ', 'IIYY', 'IIYX', 'IYII', 'IZYI', 'ZYII', 'IZZI', 'IIXX', 'ZXII', 'YYII', 'YXII', 'IYYI', 'IXII', 'IXZI', 'IIZI', 'IIYI', 'XZII', 'IIZX', 'IIIZ', 'IIYZ', 'IZII', 'XXII', 'IYZI', 'ZIII', 'IYXI', 'IXXI'}
+2025-09-16 12:32:57,190 Chose single bases:
+2025-09-16 12:32:57,190 ['IIZI', 'IIYZ', 'IIIX', 'IIXY', 'IIZY', 'IIYY']
+2025-09-16 12:32:57,221 Chose single bases:
+2025-09-16 12:32:57,221 ['IXXI', 'IZXI', 'IIYI', 'IYII', 'IZZI', 'IZYI']
+2025-09-16 12:32:57,246 Chose single bases:
+2025-09-16 12:32:57,246 ['ZZII', 'IXII', 'XYII', 'YZII', 'YYII', 'YXII']
