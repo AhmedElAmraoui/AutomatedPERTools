@@ -1,10 +1,10 @@
-2025-09-16 12:32:57,165 Created pauli bases
-2025-09-16 12:32:57,165 ['XXXX', 'YXYX', 'ZXZX', 'XYXY', 'YYYY', 'ZYZY', 'XZXZ', 'YZYZ', 'ZZZZ']
-2025-09-16 12:32:57,165 Created model with the following terms:
-2025-09-16 12:32:57,165 {'IIXI', 'XYII', 'ZZII', 'YIII', 'IXYI', 'IZXI', 'YZII', 'IIIY', 'XIII', 'IIIX', 'IIXY', 'IIZY', 'IIXZ', 'IIZZ', 'IIYY', 'IIYX', 'IYII', 'IZYI', 'ZYII', 'IZZI', 'IIXX', 'ZXII', 'YYII', 'YXII', 'IYYI', 'IXII', 'IXZI', 'IIZI', 'IIYI', 'XZII', 'IIZX', 'IIIZ', 'IIYZ', 'IZII', 'XXII', 'IYZI', 'ZIII', 'IYXI', 'IXXI'}
-2025-09-16 12:32:57,190 Chose single bases:
-2025-09-16 12:32:57,190 ['IIZI', 'IIYZ', 'IIIX', 'IIXY', 'IIZY', 'IIYY']
-2025-09-16 12:32:57,221 Chose single bases:
-2025-09-16 12:32:57,221 ['IXXI', 'IZXI', 'IIYI', 'IYII', 'IZZI', 'IZYI']
-2025-09-16 12:32:57,246 Chose single bases:
-2025-09-16 12:32:57,246 ['ZZII', 'IXII', 'XYII', 'YZII', 'YYII', 'YXII']
+2025-09-17 15:55:28,043 Created pauli bases
+2025-09-17 15:55:28,043 ['XXXX', 'YXYX', 'ZXZX', 'XYXY', 'YYYY', 'ZYZY', 'XZXZ', 'YZYZ', 'ZZZZ']
+2025-09-17 15:55:28,043 Created model with the following terms:
+2025-09-17 15:55:28,043 {'IIXX', 'IXII', 'IIYI', 'IXYI', 'YIII', 'XZII', 'ZYII', 'ZXII', 'ZZII', 'IYXI', 'IIZX', 'IIXY', 'IXZI', 'XYII', 'IIZZ', 'IYZI', 'IIXI', 'IZYI', 'IZZI', 'IZII', 'IIIY', 'IIYZ', 'IIZI', 'IIYX', 'YXII', 'YYII', 'IIIX', 'IYYI', 'IIIZ', 'IYII', 'IIYY', 'YZII', 'IZXI', 'IIZY', 'ZIII', 'IXXI', 'IIXZ', 'XXII', 'XIII'}
+2025-09-17 15:55:28,147 Chose single bases:
+2025-09-17 15:55:28,148 ['XYII', 'XXII', 'ZYII', 'ZIII', 'YYII', 'YIII']
+2025-09-17 15:55:28,226 Chose single bases:
+2025-09-17 15:55:28,226 ['IIYY', 'IIYI', 'IIZY', 'IIXY', 'IIZI', 'IIIX']
+2025-09-17 15:55:28,412 Chose single bases:
+2025-09-17 15:55:28,414 ['IXXI', 'IYXI', 'IZII', 'IXYI', 'IYZI', 'IZXI']

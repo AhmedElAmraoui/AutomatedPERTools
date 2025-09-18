@@ -9,6 +9,8 @@ from tomography.layerlearning import LayerLearning
 from primitives.processor import QiskitProcessor
 from primitives.circuit import QiskitCircuit
 
+import qiskit
+
 
 def _wrap_circuit(qc):
     """
@@ -119,12 +121,8 @@ def count_per_meas_bases_from_paulis(pauli_list: Iterable[str]) -> int:
     """
     Minimale Zahl unterschiedlicher Messbasen, die alle Paulis in pauli_list abdecken.
     """
-    bases = set()
-    for lbl in pauli_list:
-        s = _normalize_pauli_label(lbl)
-        basis = "".join('Z' if ch == 'I' else ch for ch in s)
-        bases.add(basis)
-    return len(bases)
+    op_group = qiskit.quantum_info.PauliList(pauli_list).group_commuting(qubit_wise=True)
+    return len(op_group)
 
 def count_per_runs(
     *,

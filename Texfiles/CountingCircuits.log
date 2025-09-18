@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.8.18)  16 SEP 2025 12:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.8.18)  16 SEP 2025 12:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -563,52 +563,52 @@ LaTeX Font Info:    Trying to load font information for T1+pcr on input line 61
 (C:\Users\kchar\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
-Overfull \hbox (0.99654pt too wide) detected at line 78
-[]\OMS/cmsy/m/n/12 j\OML/cmm/m/it/12 D\OMS/cmsy/m/n/12 j \OT1/cmr/m/n/12 = 5\OM
-L/cmm/m/it/12 ;  S \OT1/cmr/m/n/12 = 100\OML/cmm/m/it/12 ;  S[] \OT1/cmr/m/n/12
- = 250 :  \OML/cmm/m/it/12 N[] \OT1/cmr/m/n/12 = \OML/cmm/m/it/12 N[] \OMS/cmsy
-/m/n/12 ^^A []\OT1/cmr/m/n/12 9 \OMS/cmsy/m/n/12 ^^A \OT1/cmr/m/n/12 5 \OMS/cms
-y/m/n/12 ^^A \OT1/cmr/m/n/12 100[] + [][]\OMS/cmsy/m/n/12 j[]\OT1/cmr/m/n/12 (\
-OML/cmm/m/it/12 `\OT1/cmr/m/n/12 )\OMS/cmsy/m/n/12 j ^^A \OT1/cmr/m/n/12 250[]
- []
-
-
 
 [1
 
 {C:/Users/kchar/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/kcha
 r/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}]
-
-[2] (CountingCircuits.aux)
+(CountingCircuits.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-07-20>
  ***********
-Package rerunfilecheck Info: File `CountingCircuits.out' has not changed.
-(rerunfilecheck)             Checksum: 891171F3D9BB477471F58FA40C89FAEC;305.
+
+
+Package rerunfilecheck Warning: File `CountingCircuits.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `CountingCircuits.out':
+(rerunfilecheck)             Before: 891171F3D9BB477471F58FA40C89FAEC;305
+(rerunfilecheck)             After:  8E95F4007C344485796EB73BB84CF447;222.
  ) 
 Here is how much of TeX's memory you used:
- 14753 strings out of 473899
- 236399 string characters out of 5726500
- 1948960 words of memory out of 5000000
+ 14752 strings out of 473899
+ 236393 string characters out of 5726500
+ 1940960 words of memory out of 5000000
  37425 multiletter control sequences out of 15000+600000
  576923 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,13n,79p,555b,465s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/kchar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmex10.pfb><C:/Users/kchar/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmmi12.pfb><C:/Users/kchar/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmmi8.pfb><C:/Users/kchar/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/kchar/AppData/Local/Programs/MiKT
-eX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/kchar/AppData/Local/Progra
-ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/kchar/AppData/Local
-/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/kchar/AppD
-ata/Local/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/kchar/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/kchar/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb>
-Output written on CountingCircuits.pdf (2 pages, 113888 bytes).
+ 75i,13n,79p,555b,457s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+pdfTeX warning (dest): name{section.3} has been referenced but does not exist, 
+replaced by a fixed one
+
+<C:/Users/kchar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cm
+ex10.pfb><C:/Users/kchar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
+nts/cm/cmmi12.pfb><C:/Users/kchar/AppData/Local/Programs/MiKTeX/fonts/type1/pub
+lic/amsfonts/cm/cmmi8.pfb><C:/Users/kchar/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/amsfonts/cm/cmr12.pfb><C:/Users/kchar/AppData/Local/Programs/MiKTeX
+/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/kchar/AppData/Local/Programs
+/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/kchar/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/kchar/AppDat
+a/Local/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/kchar/AppD
+ata/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/kchar/AppD
+ata/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb>
+Output written on CountingCircuits.pdf (1 page, 107546 bytes).
 PDF statistics:
- 79 PDF objects out of 1000 (max. 8388607)
- 6 named destinations out of 1000 (max. 500000)
+ 75 PDF objects out of 1000 (max. 8388607)
+ 5 named destinations out of 1000 (max. 500000)
  25 words of extra memory for PDF output out of 10000 (max. 10000000)
 
