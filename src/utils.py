@@ -52,6 +52,25 @@ def get_unique_bonds(coupling_map):
         bond_set.add(bond)
     return list(bond_set)
 
+def edge_coloring(bonds, num_qubits):
+    """
+    Finde eine Kantenfärbung (edge coloring) der Bonds.
+    Gibt ein dict: {layer: [(i,j), ...]} zurück.
+    """
+    layers = []
+    for (i, j) in bonds:
+        # kleinster Layer finden, wo weder i noch j benutzt wird
+        placed = False
+        for layer in layers:
+            used_qubits = {q for edge in layer for q in edge}
+            if i not in used_qubits and j not in used_qubits:
+                layer.append((i, j))
+                placed = True
+                break
+        if not placed:
+            layers.append([(i, j)])
+    return {ell: layer for ell, layer in enumerate(layers)}
+
 def build_hva_layers(params, backend, num_layers=1, inst_map=None):
     assert len(params) == 3 * num_layers, "Parameteranzahl stimmt nicht mit Anzahl der Layer überein!"
     
@@ -61,6 +80,8 @@ def build_hva_layers(params, backend, num_layers=1, inst_map=None):
 
     # Initialzustand: |+>^N durch H auf allen Qubits
     qc.h(range(num_qubits))
+    
+    bond_layers = edge_coloring(bonds, num_qubits)
 
     # Schleife über die Layer
     for layer in range(num_layers):
@@ -77,10 +98,13 @@ def build_hva_layers(params, backend, num_layers=1, inst_map=None):
             qc.rx(gamma, i)
 
         # ZZ-Terme (nur für gekoppelte Qubits)
-        for i, j in bonds:
-            qc.cx(i, j)
-            qc.rz(alpha, j)
-            qc.cx(i, j)
+        for _, layer_bonds in bond_layers.items():
+            for i, j in layer_bonds:
+                qc.cx(i, j)
+            for i, j in layer_bonds:
+                qc.rz(alpha, j)
+            for i, j in layer_bonds:
+                qc.cx(i, j)
 
     return qc
 

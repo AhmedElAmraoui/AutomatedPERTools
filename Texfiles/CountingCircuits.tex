@@ -1,0 +1,63 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{picture,xcolor}
+\geometry{left=2cm,right=2cm, top=2cm, bottom=2cm, bindingoffset=5mm, headheight=2.5cm, headsep=0.5cm}
+
+\usepackage[ngerman]{babel}
+\usepackage{mathtools}
+\usepackage{yfonts}
+\usepackage{amsmath, times,amsthm}
+\usepackage{amssymb}
+
+\usepackage{fancyhdr}
+
+\fancypagestyle{style1}{
+	\fancyhead{}
+	\fancyhead[L]{\includegraphics[height=1cm]{UdS-Logo.png}}
+	\fancyhead[R]{\textbf{}}
+	\fancyfoot[L]{s}
+	\renewcommand{\headrulewidth}{2pt}
+}
+
+
+\begin{document}
+	\section{Sparse Pauli Tomography}
+	
+	% --- Sparse Pauli Tomography ---
+	\[
+	N_{\mathrm{tomo}}
+	= N_{\mathrm{layers}} \cdot \bigl( 9 \cdot |D| \cdot S \bigr)
+	+ \sum_{\ell=1}^{N_{\mathrm{layers}}} 
+	\Bigl( \, \lvert \text{single\_bases}(\ell) \rvert \cdot S_{\mathrm{single}} \Bigr)
+	\]
+	
+	\begin{align*}
+		&N_{\mathrm{layers}} && \text{= Anzahl der Clifford-Layer im Circuit} \\
+		&9 && \text{= feste Zahl der Messbasen} \\
+		&|D| && \text{= Anzahl der Tiefenwerte (z.\,B. [2,4,16,32,64])} \\
+		&S && \text{= Samples (Twirls pro Basis)} \\
+		&|\text{single\_bases}(\ell)| && \text{= Zahl der Single-Bases für Layer $\ell$} \\
+		&S_{\mathrm{single}} && \text{= Samples für die Single-Bases}
+	\end{align*}
+	
+	\section{PER} 
+	% --- PER ---
+	\[
+	N_{\mathrm{PER}}
+	= N_{\mathrm{input}} \cdot N_{\mathrm{meas\_bases}}^{\mathrm{PER}} \cdot |N_{\mathrm{strengths}}| \cdot S
+	\]
+	
+	\begin{align*}
+		&N_{\mathrm{input}} && \text{= Anzahl der Eingabecircuits} \\
+		&N_{\mathrm{meas\_bases}}^{\mathrm{PER}} && \text{= minimale Zahl Messbasen, die \texttt{pauli\_list} abdeckt} \\
+		&|N_{\mathrm{strengths}}| && \text{= Anzahl der verschiedenen Noise-Stärken} \\
+		&S && \text{= Samples (Twirls pro Basis)}
+	\end{align*}
+	
+\end{document}
