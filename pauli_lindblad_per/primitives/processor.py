@@ -26,14 +26,43 @@ from qiskit import transpile
 class QiskitProcessor(Processor):
     """Implementaton of a processor wrapper for the Qiskit API"""
 
-    def __init__(self, backend):
+    def __init__(self, backend, subgraph = False):
         self._qpu = backend
+        self.subgraph = subgraph
 
     def sub_map(self, inst_map):
         return self._qpu.coupling_map.graph.subgraph(inst_map)
 
-    def transpile(self, circuit : QiskitCircuit, inst_map, **kwargs):
-        return QiskitCircuit(transpile(circuit.qc, self._qpu, initial_layout = inst_map, **kwargs))
+    #def transpile(self, circuit : QiskitCircuit, inst_map, **kwargs):
+        #return QiskitCircuit(transpile(circuits= circuit.qc, backend = self._qpu, **kwargs))
+        
+    def transpile(self, circuit: QiskitCircuit, used_qubits=None, **kwargs):
+        if self.subgraph:
+            if used_qubits is None:
+                raise ValueError("used_qubits must be provided when subgraph=True")
+
+            from qiskit.transpiler import CouplingMap
+
+            cmap = CouplingMap(couplinglist=[
+                (u, v) for u, v in self._qpu.configuration().coupling_map
+                if u in used_qubits and v in used_qubits
+            ])
+            return QiskitCircuit(transpile(
+                circuits=circuit.qc,
+                backend=self._qpu,
+                initial_layout=used_qubits,
+                layout_method='trivial',
+                optimization_level=0,
+                **kwargs
+            ))
+        else:
+            return QiskitCircuit(transpile(
+                circuits=circuit.qc,
+                backend=self._qpu,
+                optimization_level=0,
+                **kwargs
+            ))
+
 
     @property
     def pauli_type(self):

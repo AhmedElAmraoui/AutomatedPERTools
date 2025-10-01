@@ -1,4 +1,27 @@
-matplotlib==3.6.1
-numpy==1.23.3
-qiskit==0.38.0
-typing_extensions==4.4.0
+# Core quantum computing
+qiskit>=2.0.0
+qiskit-aer>=0.17.1
+qiskit-ibm-runtime>=0.37.0
+
+# Scientific computing
+numpy>=1.24.0,<2.0.0
+scipy>=1.10.0
+matplotlib>=3.7.0
+
+# Data handling
+pandas>=2.0.0
+
+# Utilities
+typing_extensions>=4.7.0
+tqdm>=4.64.0
+networkx>=3.0
+
+# Development and testing (optional)
+jupyter>=1.0.0
+notebook>=6.5.0
+
+# IBM Quantum specific
+qiskit-ibm-provider>=0.11.0
+
+# For fake providers and simulators  
+qiskit-machine-learning>=0.7.0  # Optional for advanced ML features

@@ -8,13 +8,15 @@ class ProcessorSpec:
     """Responsible for interacting with the processor interface to generate the Pauli bases
     and the model terms. Also stores the mapping of virtual to physical qubits for transpilation"""
 
-    def __init__(self, inst_map, processor):
+    def __init__(self, inst_map, processor, used_qubits):
         self._n = len(inst_map)
         self._processor = processor
         self.inst_map = inst_map
         self._connectivity = processor.sub_map(inst_map)
         self.meas_bases = self._meas_bases()
         self.model_terms = self._model_terms()
+        self.used_qubits = used_qubits
+        self.subgraph = processor.subgraph
 
     def _meas_bases(self):
 
@@ -73,20 +75,13 @@ class ProcessorSpec:
         model_terms = set()
         identity = ["I"]*n 
 
-        #get all weight-two Paulis on with support on neighboring qubits
+        #get all weight-two paulis on with suport on nieghboring qubits
         for q1,q2 in self._connectivity.edge_list():
                 for p1, p2 in product("IXYZ", repeat=2):
                     pauli = identity.copy()
                     pauli[q1] = p1
                     pauli[q2] = p2
                     model_terms.add("".join(reversed(pauli)))
-
-        #get all weight-one Paulis
-        for q in self._connectivity.node_indices():
-            for p in "IXYZ":
-                pauli = identity.copy()
-                pauli[q] = p
-                model_terms.add("".join(reversed(pauli)))
 
         model_terms.remove("".join(identity))
 
@@ -97,4 +92,7 @@ class ProcessorSpec:
 
 
     def transpile(self, circ, **kwargs):
-        return self._processor.transpile(circ, self.inst_map, **kwargs)
+        if self._processor.subgraph:
+            return self._processor.transpile(circ,used_qubits=self.used_qubits, **kwargs)
+        else:
+            return self._processor.transpile(circ, **kwargs)
