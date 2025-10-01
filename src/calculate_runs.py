@@ -1,13 +1,10 @@
 from typing import Iterable, Optional, Iterable
 
-# --- Imports aus deinem Repo ---
-from framework.percircuit import PERCircuit
-from tomography.processorspec import ProcessorSpec
-from tomography.layerlearning import LayerLearning
-
-# Qiskit-Wrapper (in deinem Repo unter primitives)
-from primitives.processor import QiskitProcessor
-from primitives.circuit import QiskitCircuit
+from pauli_lindblad_per.framework.percircuit import PERCircuit
+from pauli_lindblad_per.tomography.processorspec import ProcessorSpec
+from pauli_lindblad_per.tomography.layerlearning import LayerLearning
+from pauli_lindblad_per.primitives.processor import QiskitProcessor
+from pauli_lindblad_per.primitives.circuit import QiskitCircuit
 
 import qiskit
 
@@ -108,14 +105,7 @@ def count_tomography_runs_from_repo(
     return result
 
 
-# -------- PER --------
-
-def _normalize_pauli_label(label: str) -> str:
-    s = "".join(label.split()).upper()
-    for ch in s:
-        if ch not in "IXYZ":
-            raise ValueError(f"Ungültiges Pauli-Zeichen: {ch!r}")
-    return s
+# -------- PER -------
 
 def count_per_meas_bases_from_paulis(pauli_list: Iterable[str]) -> int:
     """
