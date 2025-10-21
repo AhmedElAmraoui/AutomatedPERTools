@@ -1,5 +1,5 @@
-from framework.noisemodel import NoiseModel
-from tomography.benchmarkinstance import BenchmarkInstance, SINGLE
+from pauli_lindblad_per.framework.noisemodel import NoiseModel
+from pauli_lindblad_per.tomography.benchmarkinstance import BenchmarkInstance, SINGLE
 
 from itertools import product
 import logging

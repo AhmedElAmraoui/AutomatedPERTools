@@ -1,8 +1,8 @@
-from tomography.processorspec import ProcessorSpec
-from tomography.layerlearning import LayerLearning
-from tomography.analysis import Analysis
-from framework.percircuit import PERCircuit
-from per.perexperiment import PERExperiment
+from pauli_lindblad_per.tomography.processorspec import ProcessorSpec
+from pauli_lindblad_per.tomography.layerlearning import LayerLearning
+from pauli_lindblad_per.tomography.analysis import Analysis
+from pauli_lindblad_per.framework.percircuit import PERCircuit
+from pauli_lindblad_per.per.perexperiment import PERExperiment
 
 from typing import List, Any
 import logging
@@ -15,8 +15,8 @@ logging.basicConfig(filename="experiment.log",
 logger = logging.getLogger("experiment")
 logger.setLevel(logging.INFO)
 
-from primitives.circuit import QiskitCircuit
-from primitives.processor import QiskitProcessor
+from pauli_lindblad_per.primitives.circuit import QiskitCircuit
+from pauli_lindblad_per.primitives.processor import QiskitProcessor
 import pickle
 import qiskit
 
@@ -25,8 +25,8 @@ class SparsePauliTomographyExperiment:
     instance for each distinct layer, running the analysis, and then returning a PERCircuit
     with NoiseModels attached to each distinct layer"""
 
-    def __init__(self, circuits, inst_map, backend, used_qubits):
-
+    def __init__(self, circuits, backend, phys_qubits):
+        used_qubits = phys_qubits
         circuit_interface = None
         subgraph = False
         if len(used_qubits) != backend.num_qubits:
@@ -52,9 +52,8 @@ class SparsePauliTomographyExperiment:
         for layer in self._profiles:
             logger.info(layer)
 
-        self._procspec = ProcessorSpec(inst_map, processor, used_qubits)
+        self._procspec = ProcessorSpec(processor, used_qubits)
         self.instances = []
-        self._inst_map = inst_map
         self._layers = None
         self.used_qubits = used_qubits
 
@@ -121,7 +120,7 @@ class SparsePauliTomographyExperiment:
         return self.analysis.noisedataframe
 
     def create_per_experiment(self, circuits : Any) -> PERExperiment:
-        experiment = PERExperiment(circuits, self._inst_map, self.analysis.noisedataframe, backend = None, procspec = self._procspec)
+        experiment = PERExperiment(circuits, self.analysis.noisedataframe, backend = None, procspec = self._procspec)
         return experiment
 
     def save(self, filename=None):
@@ -144,7 +143,6 @@ class SparsePauliTomographyExperiment:
         save_data = {
             'timestamp': str(datetime.datetime.now()),
             'experiment_config': {
-                'inst_map': self._inst_map,
                 'used_qubits': self.used_qubits,
                 'subgraph': self.subgraph,
                 'num_profiles': len(self._profiles)

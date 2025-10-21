@@ -4,7 +4,7 @@ qiskit-aer>=0.17.1
 qiskit-ibm-runtime>=0.37.0
 
 # Scientific computing
-numpy>=1.24.0,<2.0.0
+numpy>=2.2.3
 scipy>=1.10.0
 matplotlib>=3.7.0
 
@@ -23,5 +23,4 @@ notebook>=6.5.0
 # IBM Quantum specific
 qiskit-ibm-provider>=0.11.0
 
-# For fake providers and simulators  
-qiskit-machine-learning>=0.7.0  # Optional for advanced ML features
+graphviz>=0.20.3

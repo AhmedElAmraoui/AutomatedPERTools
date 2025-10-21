@@ -1,5 +1,5 @@
 """Take in a per circuit with expectation value and return a single sampled instance"""
-from framework.instance import Instance
+from pauli_lindblad_per.framework.instance import Instance
 
 class PERInstance(Instance):
     """Represents a single circuit to be run with PER. Stores the original circuit to sample
@@ -9,7 +9,6 @@ class PERInstance(Instance):
     def __init__(
         self, 
         processor,
-        inst_map,
         percirc, 
         meas_basis, 
         noise_strength, procspec):
@@ -19,7 +18,6 @@ class PERInstance(Instance):
         self.noise_strength = noise_strength #noise-scaled strength
         self.meas_basis = meas_basis #measurement basis
         self.pauli_type = percirc._qc.pauli_type
-        self._inst_map = inst_map
         self.procspec = procspec
         self.subgraph = procspec.subgraph
         self.used_qubits=procspec.used_qubits
@@ -48,7 +46,7 @@ class PERInstance(Instance):
         if self.subgraph:
             self._circ = self._processor.transpile(self._circ,used_qubits=self.used_qubits)
         else:
-            self._circ = self._processor.transpile(self._circ, self._inst_map)
+            self._circ = self._processor.transpile(self._circ)
         
 
     def get_adjusted_expectation(self, pauli):

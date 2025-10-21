@@ -1,5 +1,5 @@
-from tomography.layernoisedata import LayerNoiseData
-from tomography.noisedataframe import NoiseDataFrame
+from pauli_lindblad_per.tomography.layernoisedata import LayerNoiseData
+from pauli_lindblad_per.tomography.noisedataframe import NoiseDataFrame
 
 from matplotlib import pyplot as plt
 import pickle

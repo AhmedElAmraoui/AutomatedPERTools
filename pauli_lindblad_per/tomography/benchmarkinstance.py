@@ -1,9 +1,9 @@
 from random import choices
 
-from primitives.pauli import QiskitPauli
-from tomography.processorspec import ProcessorSpec
-from primitives.circuit import Circuit
-from framework.instance import Instance
+from pauli_lindblad_per.primitives.pauli import QiskitPauli
+from pauli_lindblad_per.tomography.processorspec import ProcessorSpec
+from pauli_lindblad_per.primitives.circuit import Circuit
+from pauli_lindblad_per.framework.instance import Instance
 
 import logging
 logger = logging.getLogger("experiment")

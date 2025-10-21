@@ -1,4 +1,4 @@
-from framework.circuitlayer import CircuitLayer
+from pauli_lindblad_per.framework.circuitlayer import CircuitLayer
 
 class PERCircuit:
     """Aggregation of circuit layers. Responsable for parsing a circuit to create a list of

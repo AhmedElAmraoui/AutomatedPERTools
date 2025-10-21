@@ -52,6 +52,33 @@ def get_unique_bonds(coupling_map):
         bond_set.add(bond)
     return list(bond_set)
 
+def get_sites_and_bonds(sites, tol=1e-8):
+    """
+    Nimmt ein Array von 2D-Site-Koordinaten und gibt:
+      - die Anzahl der Sites (num_qubits)
+      - eine Liste von Kanten (bonds) zwischen nächsten Nachbarn
+    
+    Zwei Sites gelten als nächste Nachbarn, wenn ihr euklidischer Abstand == 1 ist.
+    
+    Args:
+        sites (np.ndarray): Array der Form (N, 2), die Koordinaten der Sites
+        tol (float): numerische Toleranz für Vergleich von Abständen
+        
+    Returns:
+        num_qubits (int), bonds (list of tuples)
+    """
+    num_qubits = len(sites)
+    bonds = []
+
+    for i in range(num_qubits):
+        for j in range(i + 1, num_qubits):
+            dist = np.linalg.norm(sites[i] - sites[j])
+            if abs(dist - 1.0) < tol:   # nur nächste Nachbarn mit Abstand 1
+                bonds.append((i, j))
+    
+    return num_qubits, bonds
+
+
 def edge_coloring(bonds, num_qubits):
     """
     Finde eine Kantenfärbung (edge coloring) der Bonds.

@@ -1,5 +1,6 @@
 from typing import Iterable, Optional, Iterable
 
+
 from pauli_lindblad_per.framework.percircuit import PERCircuit
 from pauli_lindblad_per.tomography.processorspec import ProcessorSpec
 from pauli_lindblad_per.tomography.layerlearning import LayerLearning
@@ -19,12 +20,11 @@ def _wrap_circuit(qc):
     return qc
 
 
-def count_tomography_runs_from_repo(
+def count_tomography_runs(
     *,
     qc,
-    inst_map,
     backend,
-    used_qubits,
+    phys_qubits,
     depths: Iterable[int],
     samples: int,
     single_samples: int,
@@ -42,9 +42,8 @@ def count_tomography_runs_from_repo(
 
     Args:
         qc: Qiskit QuantumCircuit oder primitives.Circuit
-        inst_map: Mapping der (virtuellen) Qubits
         backend: Qiskit-Backend (für QiskitProcessor)
-        used_qubits: Liste der verwendeten phys. Qubits 
+        phys_qubits: Liste der verwendeten phys. Qubits 
         depths: z. B. [2,4,16,32,64]
         samples: Stichproben je (Basis, Tiefe)
         single_samples: Stichproben je Single-Basis
@@ -71,9 +70,9 @@ def count_tomography_runs_from_repo(
     num_layers = len(profiles)
 
     # 2) ProcessorSpec aufsetzen (braucht Processor-Wrapper)
-    subgraph = (len(used_qubits) != backend.num_qubits)
+    subgraph = (len(phys_qubits) != backend.num_qubits)
     processor = QiskitProcessor(backend, subgraph=subgraph)
-    procspec = ProcessorSpec(inst_map, processor, used_qubits)
+    procspec = ProcessorSpec(processor, phys_qubits)
 
     # 3) Single-Bases pro Layer bestimmen (mit LayerLearning)
     single_bases_counts = []
@@ -89,7 +88,7 @@ def count_tomography_runs_from_repo(
     single_part = sum(single_bases_counts) * single_samples
     circuits = multi_part + single_part
 
-    result = {
+    res_tomo = {
         "circuits": circuits,
         "details": {
             "num_layers": num_layers,
@@ -101,18 +100,25 @@ def count_tomography_runs_from_repo(
         },
     }
     if shots is not None:
-        result["backend_runs"] = circuits * shots
-    return result
+        res_tomo["backend_runs"] = circuits * shots
+        
+    print("=== Tomography ===")
+    print("Circuits:      ", res_tomo["circuits"])
+    if "backend_runs" in res_tomo:
+        print("Backend runs: ", res_tomo["backend_runs"])
+
+    print("Details:")
+    print("  N_layers        :", res_tomo["details"]["num_layers"])
+    print("  num_meas_bases  :", res_tomo["details"]["num_meas_bases"])
+    print("  depth_count     :", res_tomo["details"]["depth_count"])
+    print("  samples         :", res_tomo["details"]["samples"])
+    print("  single_samples  :", res_tomo["details"]["single_samples"])
+    print("  sum_single_bases:", res_tomo["details"]["sum_single_bases"])
+
+    return res_tomo
 
 
 # -------- PER -------
-
-def count_per_meas_bases_from_paulis(pauli_list: Iterable[str]) -> int:
-    """
-    Minimale Zahl unterschiedlicher Messbasen, die alle Paulis in pauli_list abdecken.
-    """
-    op_group = qiskit.quantum_info.PauliList(pauli_list).group_commuting(qubit_wise=True)
-    return len(op_group)
 
 def count_per_runs(
     *,
@@ -130,11 +136,11 @@ def count_per_runs(
     Formel:
       #Circuits = #PER_Messbasen * len(noise_strengths) * samples
     """
-    num_meas_bases_per = count_per_meas_bases_from_paulis(pauli_list)
+    num_meas_bases_per = len(qiskit.quantum_info.PauliList(pauli_list).group_commuting(qubit_wise=True))
     num_strengths = sum(1 for _ in noise_strengths)
     circuits = len([qc])*num_meas_bases_per * num_strengths * samples
 
-    out = {
+    res_per = {
         "circuits": circuits,
         "details": {
             "num_meas_bases_per": num_meas_bases_per,
@@ -143,6 +149,16 @@ def count_per_runs(
         },
     }
     if shots is not None:
-        out["backend_runs"] = circuits * shots
-    return out
+        res_per["backend_runs"] = circuits * shots
+        
+    # PER Ergebnisse
+    print("\n=== PER ===")
+    print("Circuits:      ", res_per["circuits"])
+    if "backend_runs" in res_per:
+        print("Backend runs: ", res_per["backend_runs"])
 
+    print("Details:")
+    print("  num_meas_bases_per :", res_per["details"]["num_meas_bases_per"])
+    print("  num_noise_strengths:", res_per["details"]["num_noise_strengths"])
+    print("  samples            :", res_per["details"]["samples"])
+    return res_per

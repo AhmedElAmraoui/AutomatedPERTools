@@ -1,4 +1,4 @@
-from framework.noisemodel import NoiseModel
+from pauli_lindblad_per.framework.noisemodel import NoiseModel
 from typing import List, Dict
 
 class NoiseDataFrame:

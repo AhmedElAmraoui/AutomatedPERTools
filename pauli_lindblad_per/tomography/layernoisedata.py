@@ -2,11 +2,11 @@ from scipy.optimize import nnls
 import numpy as np
 from matplotlib import pyplot as plt
 
-from framework.noisemodel import NoiseModel
-from tomography.layerlearning import LayerLearning
-from tomography.termdata import TermData, COLORS
-from primitives.circuit import Circuit
-from tomography.benchmarkinstance import BenchmarkInstance, SINGLE, PAIR
+from pauli_lindblad_per.framework.noisemodel import NoiseModel
+from pauli_lindblad_per.tomography.layerlearning import LayerLearning
+from pauli_lindblad_per.tomography.termdata import TermData, COLORS
+from pauli_lindblad_per.primitives.circuit import Circuit
+from pauli_lindblad_per.tomography.benchmarkinstance import BenchmarkInstance, SINGLE, PAIR
 
 import logging
 from itertools import cycle
@@ -163,7 +163,7 @@ class LayerNoiseData:
             coeffs = {
             term.to_label(): value
             for term, value in self.noisemodel.coeffs}
-            coupling_list = self.layer._procspec._processor.sub_map(self.layer._procspec.inst_map)
+            coupling_list = self.layer._procspec._processor.sub_map(self.layer._procspec.used_qubits)
             self.plot_grouped_by_qubit(model_terms, coeffs, coupling_list, title="Model Coefficients", ylabel= "Coefficients")
 
     def graph(self, *links):
@@ -198,7 +198,7 @@ class LayerNoiseData:
             for term in model_terms:
                 infidelities[term] = 1-self._term_data[Pauli(term)].fidelity
             
-            coupling_list = self.layer._procspec._processor.sub_map(self.layer._procspec.inst_map)
+            coupling_list = self.layer._procspec._processor.sub_map(self.layer._procspec.used_qubits)
             self.plot_grouped_by_qubit(model_terms, infidelities, coupling_list, title="Infidelity")
             
             

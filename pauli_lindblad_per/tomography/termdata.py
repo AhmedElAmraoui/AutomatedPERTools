@@ -5,7 +5,7 @@ from random import choice
 from collections import Counter
 import logging
 
-from tomography.benchmarkinstance import SINGLE, PAIR
+from pauli_lindblad_per.tomography.benchmarkinstance import SINGLE, PAIR
 
 logger = logging.getLogger("experiment")
 

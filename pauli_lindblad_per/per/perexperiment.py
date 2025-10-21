@@ -1,7 +1,7 @@
-from primitives.circuit import QiskitCircuit
-from framework.percircuit import PERCircuit
-from per.perrun import PERRun
-from primitives.processor import QiskitProcessor
+from pauli_lindblad_per.primitives.circuit import QiskitCircuit
+from pauli_lindblad_per.framework.percircuit import PERCircuit
+from pauli_lindblad_per.per.perrun import PERRun
+from pauli_lindblad_per.primitives.processor import QiskitProcessor
 import datetime
 import logging
 
@@ -17,13 +17,12 @@ class PERExperiment:
     - Process results and return for display
     """
     
-    def __init__(self, circuits, inst_map, noise_data_frame, backend = None, procspec = None):
+    def __init__(self, circuits, noise_data_frame, backend = None, procspec = None):
         """Initializes a PERExperiment with the data that stays constant for all circuits/
         noise strengths/expectation values
 
         Args:
             circuits (Any): Circuits to run with PER
-            inst_map (List): Mapping of virtual qubits to physical qubits
             noise_data_frame (NoiseDataFrame): Noise models learned from tomography
             backend (Any): Backend to use for transpilation. None if passing an initialize processor
             processor (Processor) : Backend to use for transpilation. None if passing a native backend
@@ -53,7 +52,6 @@ class PERExperiment:
             per_circuits.append(per_circ)
 
         self._per_circuits = per_circuits
-        self._inst_map = inst_map
 
     def get_meas_bases(self, expectations):
         """Return the minimal set of bases needed to reconstruct the desired expectation values
@@ -100,7 +98,6 @@ class PERExperiment:
         for pcirc in self._per_circuits:
             per_run = PERRun(
                 self._processor, 
-                self._inst_map, 
                 pcirc, 
                 samples,
                 noise_strengths,
@@ -182,7 +179,6 @@ class PERExperiment:
             'timestamp': str(datetime.datetime.now()),
             'experiment_type': 'PER',
             'experiment_config': {
-                'inst_map': self._inst_map,
                 'num_per_runs': len(self._per_runs),
                 'meas_bases': [str(base) for base in getattr(self, 'meas_bases', [])],
             },

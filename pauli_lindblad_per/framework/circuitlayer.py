@@ -1,5 +1,5 @@
-from primitives.circuit import Circuit
-from primitives.pauli import Pauli
+from  pauli_lindblad_per.primitives.circuit import Circuit
+from  pauli_lindblad_per.primitives.pauli import Pauli
 
 from typing_extensions import Self
 from typing import Tuple

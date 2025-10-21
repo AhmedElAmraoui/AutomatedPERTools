@@ -137,7 +137,7 @@ Implementierung von Benchmark-Instanzen für die Charakterisierung.
 
 ```python
 # 1. Tomografie-Experiment initialisieren
-experiment = SparsePauliTomographyExperiment(circuits, inst_map, backend, used_qubits)
+experiment = SparsePauliTomographyExperiment(circuits, backend, used_qubits)
 
 # 2. Benchmarking-Prozeduren generieren
 experiment.generate(samples=1000, single_samples=2000, depths=[1, 2, 3, 4])

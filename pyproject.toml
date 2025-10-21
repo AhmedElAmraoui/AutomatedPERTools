@@ -1,0 +1,11 @@
+[project]
+name = "pauli_lindblad_per"
+version = "0.1.0"
+description = "Automated Pauli-Lindblad Parameter Estimation Tools"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
-from primitives.circuit import Circuit, QiskitCircuit
-from primitives.pauli import QiskitPauli
+from pauli_lindblad_per.primitives.circuit import Circuit, QiskitCircuit
+from pauli_lindblad_per.primitives.pauli import QiskitPauli
+from qiskit.transpiler import CouplingMap
+from qiskit import transpile as qiskit_transpile
+
 
 class Processor(ABC):
     """A wrapper for interacting with a qpu backend. This object is responsible for
@@ -12,16 +15,13 @@ class Processor(ABC):
         between qubits at those hardware addresses"""
 
     @abstractmethod
-    def transpile(self, circuit : Circuit, inst_map, **kwargs):
+    def transpile(self, circuit : Circuit, used_qubits, **kwargs):
         """Transpile a circuit into the native gateset"""
     
     @property
     @abstractmethod
     def pauli_type(self):
         """Returns the native Pauli type associated"""
-
-
-from qiskit import transpile
 
 class QiskitProcessor(Processor):
     """Implementaton of a processor wrapper for the Qiskit API"""
@@ -30,38 +30,41 @@ class QiskitProcessor(Processor):
         self._qpu = backend
         self.subgraph = subgraph
 
-    def sub_map(self, inst_map):
-        return self._qpu.coupling_map.graph.subgraph(inst_map)
-
-    #def transpile(self, circuit : QiskitCircuit, inst_map, **kwargs):
-        #return QiskitCircuit(transpile(circuits= circuit.qc, backend = self._qpu, **kwargs))
+    def sub_map(self, used_qubits):
+        return self._qpu.coupling_map.graph.subgraph(used_qubits)
         
     def transpile(self, circuit: QiskitCircuit, used_qubits=None, **kwargs):
         if self.subgraph:
             if used_qubits is None:
                 raise ValueError("used_qubits must be provided when subgraph=True")
 
-            from qiskit.transpiler import CouplingMap
-
+            # Sub-CouplingMap nur für die ausgewählten Qubits
             cmap = CouplingMap(couplinglist=[
-                (u, v) for u, v in self._qpu.configuration().coupling_map
+                (u, v)
+                for (u, v) in self._qpu.configuration().coupling_map
                 if u in used_qubits and v in used_qubits
             ])
-            return QiskitCircuit(transpile(
+
+            # Transpile mit festem Layout + Sub-CouplingMap
+            tqc = qiskit_transpile(
                 circuits=circuit.qc,
                 backend=self._qpu,
-                initial_layout=used_qubits,
+                coupling_map=cmap,
+                initial_layout=used_qubits,    # virtuell 0..n → physisch diese IDs
                 layout_method='trivial',
+                routing_method='none',         # keine Swaps / keine anderen Qubits
                 optimization_level=0,
                 **kwargs
-            ))
+            )
         else:
-            return QiskitCircuit(transpile(
+            tqc = qiskit_transpile(
                 circuits=circuit.qc,
                 backend=self._qpu,
                 optimization_level=0,
                 **kwargs
-            ))
+            )
+
+        return QiskitCircuit(tqc)
 
 
     @property

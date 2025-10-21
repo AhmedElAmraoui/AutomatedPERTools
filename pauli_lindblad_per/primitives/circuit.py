@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from typing_extensions import Self
 from typing import List, Type, Any
 
-from primitives.instruction import Instruction
-from primitives.pauli import Pauli
+from pauli_lindblad_per.primitives.instruction import Instruction
+from pauli_lindblad_per.primitives.pauli import Pauli
 
 class Circuit(ABC):
     """A class to standardize interface with the native representation of a quantum circuit.
@@ -88,8 +88,8 @@ class Circuit(ABC):
         return str([inst.__str__() for inst in self])
 
 
-from primitives.pauli import QiskitPauli
-from primitives.instruction import QiskitInstruction
+from pauli_lindblad_per.primitives.pauli import QiskitPauli
+from pauli_lindblad_per.primitives.instruction import QiskitInstruction
 
 class QiskitCircuit(Circuit):
     """This is an implementation of the Circuit interface for the Qiskit API"""
