@@ -1,0 +1,32 @@
+2025-10-21 12:08:58,820 Generated layer profile with 2 layers:
+2025-10-21 12:08:58,820 ['(\'cx\', (<Qubit register=(4, "q"), index=0>, <Qubit register=(4, "q"), index=1>))', '(\'cx\', (<Qubit register=(4, "q"), index=2>, <Qubit register=(4, "q"), index=3>))']
+2025-10-21 12:08:58,820 ['(\'cx\', (<Qubit register=(4, "q"), index=0>, <Qubit register=(4, "q"), index=3>))', '(\'cx\', (<Qubit register=(4, "q"), index=1>, <Qubit register=(4, "q"), index=2>))']
+2025-10-21 12:08:58,821 Created pauli bases
+2025-10-21 12:08:58,821 ['XXXX', 'YXYX', 'ZXZX', 'XYXY', 'YYYY', 'ZYZY', 'XZXZ', 'YZYZ', 'ZZZZ']
+2025-10-21 12:08:58,822 Created model with the following terms:
+2025-10-21 12:08:58,822 {'IXYI', 'IIYY', 'IIIZ', 'IIZZ', 'IYXI', 'YZII', 'YYII', 'IYZI', 'IIXX', 'IZYI', 'ZZII', 'IIIX', 'IIYX', 'XXII', 'XZII', 'IYII', 'IXXI', 'ZIII', 'IIYZ', 'IZII', 'YIII', 'IXII', 'IIYI', 'XYII', 'IIZX', 'IZXI', 'IIZY', 'IIIY', 'IIXI', 'IXZI', 'IIZI', 'IIXZ', 'IYYI', 'IZZI', 'XIII', 'ZXII', 'IIXY', 'ZYII', 'YXII'}
+2025-10-21 12:08:58,845 Chose single bases:
+2025-10-21 12:08:58,845 ['YXXY', 'IYYX', 'IXZI', 'YIYI', 'YYXX', 'ZZYY']
+2025-10-21 12:09:04,099 Created experiment consisting of 1950 instances
+2025-10-21 12:09:04,111 Chose single bases:
+2025-10-21 12:09:04,111 ['IYII', 'IYYI', 'IZZI', 'IXYI', 'IXXI', 'IZYI']
+2025-10-21 12:09:10,832 Created experiment consisting of 1950 instances
+2025-10-21 12:09:26,411 Experiment results saved to SaveFiles/experiment_results_20251021_120926.json
+2025-10-21 12:09:26,411 Saved 3900 instance results
+2025-10-21 12:09:26,412 Results automatically saved to SaveFiles/experiment_results_20251021_120926.json
+2025-10-21 12:09:43,317 Fit noise model with following fidelities:
+2025-10-21 12:09:43,317 [np.float64(0.940182962180166), np.float64(0.9273707280904253), np.float64(0.9869107796637853), np.float64(0.9819467025236013), np.float64(0.9465161826957225), np.float64(0.9724911865484255), np.float64(0.9395728275692691), np.float64(0.9437079571730715), np.float64(0.9314405119218906), np.float64(0.9752370454332029), np.float64(0.9841662261258715), np.float64(0.9408962000967906), np.float64(0.9305354989766772), np.float64(0.9498804331684224), np.float64(0.9720749342335017), np.float64(0.9621179328509326), np.float64(0.9475564623831676), np.float64(0.9960773281514784), np.float64(0.9772169369583339), np.float64(0.991958688752773), np.float64(0.9808177975319037), np.float64(0.9609526534797714), np.float64(0.9892959801502792), np.float64(0.9471136787799883), np.float64(0.9375854561408515), np.float64(0.9829902747258831), np.float64(0.933252343616638), np.float64(0.9290045619104085), np.float64(0.9912783566661949), np.float64(0.9398881272547676), np.float64(0.9894329675179073), np.float64(0.979993608617786), np.float64(0.9397729761717633), np.float64(0.9766307951654117), np.float64(0.979973902846597), np.float64(0.960133619606538), np.float64(0.9440650330188803), np.float64(0.9618976506408322), np.float64(0.943746191088809)]
+2025-10-21 12:09:43,353 Single-depth measurement produced fidelity greater than one: IYYI,IZXI
+2025-10-21 12:09:43,353 Product fidelity: 0.9430777914996026
+2025-10-21 12:09:43,353 Single fidelity: 0.8542210044947784
+2025-10-21 12:09:43,353 Single-depth measurement produced fidelity greater than one: IZZI,IZII
+2025-10-21 12:09:43,353 Product fidelity: 0.9828440698704045
+2025-10-21 12:09:43,353 Single fidelity: 0.9229709369593995
+2025-10-21 12:09:43,353 Single-depth measurement produced fidelity greater than one: IXYI,IIYI
+2025-10-21 12:09:43,353 Product fidelity: 0.944106510315237
+2025-10-21 12:09:43,353 Single fidelity: 0.8278564321182589
+2025-10-21 12:09:43,353 Single-depth measurement produced fidelity greater than one: IXXI,IIXI
+2025-10-21 12:09:43,353 Product fidelity: 0.9418758356704919
+2025-10-21 12:09:43,353 Single fidelity: 0.8136337674912807
+2025-10-21 12:09:43,354 Fit noise model with following fidelities:
+2025-10-21 12:09:43,354 [np.float64(0.8913371028196146), np.float64(0.8954514832190501), np.float64(0.990705211431308), np.float64(0.9814675865364118), np.float64(0.9168408195407263), np.float64(0.9691697307591323), np.float64(0.9634516548593727), np.float64(0.9864360467344101), np.float64(0.8946439557792344), np.float64(0.9577747613227519), np.float64(0.9768221136711088), np.float64(0.9431555336147043), np.float64(0.8935887691796789), np.float64(0.9735635475150151), np.float64(0.9744632277211143), np.float64(0.9849734680663792), np.float64(0.8871300898199875), np.float64(0.9873044734582126), np.float64(0.9402013784626908), np.float64(1.0108877771332796), np.float64(0.9815968017290578), np.float64(0.9872462151194922), np.float64(1.0049822002505513), np.float64(0.9726337385874225), np.float64(0.9361930197430215), np.float64(0.9987065232227474), np.float64(0.9306745491932233), np.float64(0.9413237599874079), np.float64(1.0036604671999891), np.float64(0.9770271055520091), np.float64(0.9904578051878677), np.float64(0.9360754127534058), np.float64(0.8893957208197679), np.float64(0.9659824656794206), np.float64(0.9872820469999548), np.float64(0.9735461878581568), np.float64(0.894121628856872), np.float64(0.9698151413107925), np.float64(0.9699575364867222)]

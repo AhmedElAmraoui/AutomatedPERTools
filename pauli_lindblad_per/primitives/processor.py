@@ -48,12 +48,10 @@ class QiskitProcessor(Processor):
             # Transpile mit festem Layout + Sub-CouplingMap
             tqc = qiskit_transpile(
                 circuits=circuit.qc,
-                backend=self._qpu,
                 coupling_map=cmap,
                 initial_layout=used_qubits,    # virtuell 0..n → physisch diese IDs
-                layout_method='trivial',
-                routing_method='none',         # keine Swaps / keine anderen Qubits
                 optimization_level=0,
+                basis_gates=self._qpu.configuration().basis_gates,
                 **kwargs
             )
         else:
