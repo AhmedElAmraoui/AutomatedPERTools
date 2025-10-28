@@ -141,7 +141,7 @@ class LayerNoiseData:
 
         return dict(zip(self._term_data.keys(), [termdata.spam for termdata in self._term_data.values()]))
 
-    def plot_coeffs(self, *links, plot_style = 1):
+    def plot_coeffs(self, *links, plot_style = 2):
         """Plot the model coefficients in the generator of the sparse model corresponding
         to the current circuit layer"""
         
@@ -178,7 +178,7 @@ class LayerNoiseData:
 
         return ax
 
-    def plot_infidelitites(self, *links, plot_style = 1):
+    def plot_infidelitites(self, *links, plot_style = 2):
         """Plot the infidelities of a subset of Pauli terms"""
         if plot_style == 1:
             groups = self._model_terms(links)

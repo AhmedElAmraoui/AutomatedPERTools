@@ -7,6 +7,7 @@ from pauli_lindblad_per.per.perexperiment import PERExperiment
 from typing import List, Any
 import logging
 import datetime
+from typing import Iterable, Optional
  
 logging.basicConfig(filename="experiment.log",
                     format='%(asctime)s %(message)s',
@@ -64,12 +65,14 @@ class SparsePauliTomographyExperiment:
 
         self.analysis = Analysis(self._layers, self._procspec)
 
-    def generate(self, samples, single_samples, depths):
+    def generate(self, samples, single_samples, depths, shots=None):
         """This method is used to generate the experimental benchmarking procedure. The samples
         are the number of times to sample from the Pauli twirl. The single_samples controls
         how many twirl samples to take from the degeneracy-lifting measurements. It may desirable
         to make this higher since the error on these measurements will generally be higher.
         The depths control the different circuit depths to use for the exponential fits."""
+
+        res = self.count_tomography_runs(depths=depths,samples=samples, single_samples=single_samples, shots = shots)
 
         if len(depths) < 2:
             raise Exception("Exponental fit requires 3 or more depth data points.")
@@ -302,3 +305,57 @@ class SparsePauliTomographyExperiment:
                 if hasattr(inst, '_result') and inst._result is not None:
                     return True
         return False
+
+    def count_tomography_runs(self, depths: Iterable[int],samples: int, single_samples: int, shots: Optional[int] = None):
+        """
+        Returns:
+            dict mit:
+            - "circuits": Anzahl der erzeugten Circuits
+            - "backend_runs": (nur wenn shots übergeben) circuits * shots
+            - "details": kleine Aufschlüsselung
+        """
+
+        num_layers = len(self._profiles)
+
+        # 3) Single-Bases pro Layer bestimmen (mit LayerLearning)
+        single_bases_counts = []
+        for cliff_layer in self._profiles:
+            ll = LayerLearning(cliff_layer, self._procspec)
+            ll._single_bases()  # befüllt ll.single_bases
+            single_bases_counts.append(len(ll.single_bases))
+
+        num_meas_bases = 9  # festgelegt
+        depth_count = sum(1 for _ in depths)
+
+        multi_part = num_layers * (num_meas_bases * depth_count * samples)
+        single_part = sum(single_bases_counts) * single_samples
+        circuits = multi_part + single_part
+
+        res_tomo = {
+            "circuits": circuits,
+            "details": {
+                "num_layers": num_layers,
+                "num_meas_bases": num_meas_bases,
+                "depth_count": depth_count,
+                "samples": samples,
+                "single_samples": single_samples,
+                "sum_single_bases": sum(single_bases_counts),
+            },
+        }
+        if shots is not None:
+            res_tomo["backend_runs"] = circuits * shots
+            
+        print("=== Tomography ===")
+        print("Circuits:      ", res_tomo["circuits"])
+        if "backend_runs" in res_tomo:
+            print("Backend runs: ", res_tomo["backend_runs"])
+
+        print("Details:")
+        print("  N_layers        :", res_tomo["details"]["num_layers"])
+        print("  num_meas_bases  :", res_tomo["details"]["num_meas_bases"])
+        print("  depth_count     :", res_tomo["details"]["depth_count"])
+        print("  samples         :", res_tomo["details"]["samples"])
+        print("  single_samples  :", res_tomo["details"]["single_samples"])
+        print("  sum_single_bases:", res_tomo["details"]["sum_single_bases"])
+
+        return res_tomo

@@ -7,6 +7,7 @@ import networkx as nx
 from qiskit.primitives import BackendSamplerV2
 from scipy.linalg import eigh
 from tqdm.auto import tqdm
+from qiskit.transpiler import CouplingMap
 
 def get_sites_and_bonds(sites, tol=1e-8):
     """
@@ -510,3 +511,27 @@ def get_pauli_expectation_dict(groups, counts):
             pauli_expectations[pauli_str] = exp_val
 
     return pauli_expectations
+
+
+def compute_exp_value(qc,Hamiltonian,backend,phys_qubits=None, shots=1024):
+
+    sampler = BackendSamplerV2(backend=backend, options={"default_shots": shots})
+    cmap = CouplingMap(couplinglist=[
+                (u, v)
+                for (u, v) in backend.configuration().coupling_map
+                if u in phys_qubits and v in phys_qubits
+            ])
+
+    paulis = [p.to_label() for p in Hamiltonian.paulis]
+    coeffs = Hamiltonian.coeffs
+    groups = group_paulis(paulis)
+    bases  = determine_measurement_basis(groups)
+    circuits = apply_measurement_bases(qc, bases)
+    tcircs = transpile(circuits=circuits, initial_layout=phys_qubits, coupling_map=cmap)
+
+    res = sampler.run(tcircs).result()
+    counts_all = [r.data.meas.get_counts() for r in res]
+    pauli_exp = get_pauli_expectation_dict(groups, counts_all)
+    exp_val = sum(pauli_exp[label] * c for label, c in zip(paulis, coeffs))
+
+    return exp_val

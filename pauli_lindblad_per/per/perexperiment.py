@@ -4,6 +4,8 @@ from pauli_lindblad_per.per.perrun import PERRun
 from pauli_lindblad_per.primitives.processor import QiskitProcessor
 import datetime
 import logging
+from typing import Iterable, Optional
+import qiskit
 
 class PERExperiment:
     """This class plays the role of the SparsePauliTomographyExperiment class but for the
@@ -43,7 +45,7 @@ class PERExperiment:
 
 
         self.noise_data_frame = noise_data_frame #store noise data
-        #Geerate list of PER circuits and assign noise models to layers 
+        #Generate list of PER circuits and assign noise models to layers 
         per_circuits = []
         for circ in circuits:
             circ_wrap = circuit_interface(circ) #wrap Circuit object
@@ -76,7 +78,8 @@ class PERExperiment:
         self, 
         expectations, 
         samples, 
-        noise_strengths
+        noise_strengths,
+        shots = None
         ):
         """Initiate the generation of circuits required for PER
 
@@ -85,6 +88,8 @@ class PERExperiment:
             expectations (list[str]): expectation values to reconstruct
             samples (int): number of samples to take from distribution
         """
+
+        res = self.count_per_runs(pauli_list=expectations,samples=samples, noise_strengths=noise_strengths,shots=shots)
 
         #Convert string labels to Pauli representation
         expectations = [self.pauli_type(label) for label in expectations]
@@ -106,6 +111,8 @@ class PERExperiment:
                 self.procspec
                 )
             self._per_runs.append(per_run)
+
+
 
     def run(self, executor, auto_save=True, save_filename=None):
         """pass a list of circuit in the native language to the executor method and await results
@@ -338,3 +345,39 @@ class PERExperiment:
                 if hasattr(inst, '_result') and inst._result is not None:
                     return True
         return False
+
+    def count_per_runs(self,pauli_list: Iterable[str],samples: int, noise_strengths: Iterable[object], shots: Optional[int] = None):
+        """
+        Zählt die Circuits (und optional Backend-Runs) für:
+            perexp.generate(expectations=pauli_list, samples=..., noise_strengths=[...])
+            perexp.run(executor)
+
+        Formel:
+        #Circuits = #PER_Messbasen * len(noise_strengths) * samples
+        """
+        num_meas_bases_per = len(qiskit.quantum_info.PauliList(pauli_list).group_commuting(qubit_wise=True))
+        num_strengths = sum(1 for _ in noise_strengths)
+        circuits = len(self._per_circuits)*num_meas_bases_per * num_strengths * samples
+
+        res_per = {
+            "circuits": circuits,
+            "details": {
+                "num_meas_bases_per": num_meas_bases_per,
+                "num_noise_strengths": num_strengths,
+                "samples": samples,
+            },
+        }
+        if shots is not None:
+            res_per["backend_runs"] = circuits * shots
+            
+        # PER Ergebnisse
+        print("\n=== PER ===")
+        print("Circuits:      ", res_per["circuits"])
+        if "backend_runs" in res_per:
+            print("Backend runs: ", res_per["backend_runs"])
+
+        print("Details:")
+        print("  num_meas_bases_per :", res_per["details"]["num_meas_bases_per"])
+        print("  num_noise_strengths:", res_per["details"]["num_noise_strengths"])
+        print("  samples            :", res_per["details"]["samples"])
+        return res_per
