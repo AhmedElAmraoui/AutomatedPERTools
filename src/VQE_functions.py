@@ -217,7 +217,7 @@ def init_parameters(hx, hz, J, num_layers, c=0.3, jitter=0.02, seed=None):
 
 def optimize_energy(initial_params, Hamiltonian, topology, num_layers=1,
                     backend=None, mode="statevector", initial_layout=None,
-                    maxiter=200, shots=1000, method="Powell", bounds=None):
+                    maxiter=200, shots=1000, method="Powell", bounds=None, print_status= False):
 
     qc, param_labels = build_hva_layers(topology=topology, num_layers=num_layers)
 
@@ -259,9 +259,11 @@ def optimize_energy(initial_params, Hamiltonian, topology, num_layers=1,
         else:
             raise ValueError(f"Bounds werden von '{method}' nicht unterstützt.")
         
-    print("Optimierung startet...")
+    if print_status:
+        print("Optimierung startet...")
     result = minimize(compute_energy, initial_params, **kwargs)
-    print("Optimierung fertig.")
+    if print_status:
+        print("Optimierung fertig.")
     
     if mode == "measurement":
         bind_map = {p: float(v) for p, v in zip(param_labels, result.x)}
