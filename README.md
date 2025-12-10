@@ -1,52 +1,85 @@
 # AutomatedPERTools
 
-Dieses Repository enthält eine Sammlung von Modulen und Experimentier-Tools für
-**Tomography** und **Probabilistic Error Reduction (PER)** Experimente auf
-Quanten-Hardware und Simulatoren.  
+Tools for automated Sparse Pauli tomography and Probabilistic Error Reduction (PER) on Qiskit simulators and hardware. The package focuses on automatically building twirled circuits, learning Pauli-Lindblad noise models, and running PER fits without manual bookkeeping. Utilities are included to forecast how many circuits/back-end runs a configuration will require.
 
-Ziel ist es, automatisiert Circuits zu generieren, sie mit Twirling-Strategien
-auszuführen, und die Ergebnisse zu analysieren. Zusätzlich gibt es Hilfsfunktionen,
-um die Anzahl der tatsächlich erzeugten Circuits (und optional Backend-Runs inkl.
-Shots) im Voraus zu berechnen.
+## Project layout
 
----
-
-## Projektstruktur
-
-- **`primitives/`**  
-  Low-Level-Bausteine und Schnittstellen zu Qiskit:
-  - `processor.py` – Definition von `QiskitProcessor` (Backend-Anbindung)
-  - `circuit.py` – Wrapper für `QuantumCircuit` → interne Circuit-API
-
-- **`framework/`**  
-  Framework-Komponenten für die Repräsentation von Circuits:
-  - `percircuit.py` – Zerlegung von Circuits in einzelne Layer (`cliff_layer`)
-
-- **`tomography/`**  
-  Module für Sparse Pauli Tomography:
-  - `experiment.py` – `SparsePauliTomographyExperiment`, steuert Generierung, Ausführung, Analyse
-  - `layerlearning.py` – Berechnung der kompatiblen Messbasen je Layer (`_single_bases`)
-  - `processorspec.py` – Spezifikation des Prozessors (Gate-Map, Messbasen)
-  - `layernoisedata.py` – Noise-Modellierung auf Layer-Ebene
-
-- **`per/`**  
-  Module für Probabilistic Error Reduction:
-  - `perexperiment.py` – PER-Experiment-Klasse, Generierung & Analyse
-  - `perrun.py`, `perinstance.py` – Helfer für einzelne Runs und Instanzen
-
-- **`src/`**  
-  Zusätzliche Hilfsfunktionen:
-  - `calculate_runs.py` – Funktionen zur Berechnung der Anzahl erzeugter Circuits und Backend-Runs
-    für Tomography- und PER-Experimente.
-
----
+- `pauli_lindblad_per/` – core package  
+  - `primitives/` – minimal interfaces for circuits (`Circuit`, `QiskitCircuit`), instructions, Paulis, and processors.  
+  - `tomography/` – `SparsePauliTomographyExperiment`, layer learning, processor specs, and analysis utilities.  
+  - `per/` – PER experiment orchestration, run management, and data fitting.  
+  - The code depends on supporting circuit-decomposition classes (e.g., `PERCircuit`, circuit layers) under `pauli_lindblad_per.framework`; ensure these files are available in your working copy.
+- `src/` – helper scripts such as `calculate_runs.py` (circuit/run counting), `utils.py` (backend helpers, VQE utilities), plotting helpers, and VQE examples.
+- `tutorial_notebooks/` – end-to-end walkthroughs (procedure overview, tomography, workflow, Trotter/VQE demos, PyGSTi/Mitiq data processing).
+- `tests_and_figures/` – experimental notebooks for benchmarking, subgraph tests, PER plots, and VQE examples.
+- `RealBackendRun*.ipynb`, `TestFramework_realNoisemodel*.ipynb` – example experiments against IBM Quantum backends.
 
 ## Installation
 
-Voraussetzung: Python 3.10+, [Qiskit](https://qiskit.org), sowie ggf. weitere Pakete
-wie `numpy`, `scipy`.
+Requires Python 3.10+ and Qiskit with Aer/IBM provider support.
 
 ```bash
+python -m venv .venv
+source .venv/bin/activate
 git clone https://github.com/<user>/AutomatedPERTools.git
 cd AutomatedPERTools
 pip install -r requirements.txt
+# optional: install the package in editable mode
+pip install -e .
+```
+
+Log in to IBM Quantum (`qiskit-ibm-provider`) if you plan to run on real hardware.
+
+## Quick start
+
+```python
+from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
+from pauli_lindblad_per.tomography.experiment import SparsePauliTomographyExperiment
+
+# 1) Build a circuit and pick a backend
+qc = QuantumCircuit(2)
+qc.h(0); qc.cx(0, 1); qc.measure_all()
+backend = AerSimulator()
+
+# 2) Configure and generate tomography workloads
+phys_qubits = [0, 1]  # subset if needed
+experiment = SparsePauliTomographyExperiment([qc], backend, phys_qubits)
+experiment.generate(samples=10, single_samples=20, depths=[1, 2, 3])
+
+# 3) Define how circuits are executed on your backend
+def executor(circuits):
+    job = backend.run(transpile(circuits, backend), shots=4000)
+    result = job.result()
+    return [result.get_counts(i) for i in range(len(circuits))]
+
+experiment.run(executor)
+noise_df = experiment.analyze()          # Pauli-Lindblad noise data
+
+# 4) Turn tomography results into a PER experiment
+per_exp = experiment.create_per_experiment([qc])
+per_exp.generate(expectations=["ZZ", "XX"], samples=200, noise_strengths=[0.1, 0.2, 0.3])
+per_exp.run(executor)
+per_results = per_exp.analyze()
+```
+
+Results are auto-saved to `SaveFiles/experiment_results_*.json` and `SaveFiles/per_results_*.json` for crash recovery; `load()` methods restore them.
+
+## Estimate workload without running
+
+Use `src/calculate_runs.py` to predict circuit counts before launching long jobs:
+
+```python
+from src.calculate_runs import count_tomography_runs, count_per_runs
+count_tomography_runs(qc=qc, backend=backend, phys_qubits=[0,1],
+                      depths=[1,2,3], samples=10, single_samples=20, shots=4000)
+count_per_runs(qc=qc, pauli_list=["ZZ", "XX"], noise_strengths=[0.1,0.2,0.3],
+               samples=200, shots=4000)
+```
+
+## Notebooks
+
+- `tutorial_notebooks/pauli_lindblad_per/` – guided workflow, tomography walkthrough, Trotter and VQE examples.
+- `tutorial_notebooks/pygsti_mitiq_per/` – PyGSTi/Mitiq data preparation and noise-scaling examples.
+- `tests_and_figures/` – ad-hoc experiments, PER plotting, subgraph tests, VQE demos.
+
