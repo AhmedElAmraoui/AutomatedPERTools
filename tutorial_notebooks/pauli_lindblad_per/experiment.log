@@ -1,33 +1,22 @@
-2025-10-28 11:46:03,144 Generated layer profile with 2 layers:
-2025-10-28 11:46:03,144 ['(\'cx\', (<Qubit register=(4, "q"), index=0>, <Qubit register=(4, "q"), index=3>))', '(\'cx\', (<Qubit register=(4, "q"), index=1>, <Qubit register=(4, "q"), index=2>))']
-2025-10-28 11:46:03,144 ['(\'cx\', (<Qubit register=(4, "q"), index=0>, <Qubit register=(4, "q"), index=1>))', '(\'cx\', (<Qubit register=(4, "q"), index=2>, <Qubit register=(4, "q"), index=3>))']
-2025-10-28 11:46:03,145 Created pauli bases
-2025-10-28 11:46:03,145 ['XXXX', 'YXYX', 'ZXZX', 'XYXY', 'YYYY', 'ZYZY', 'XZXZ', 'YZYZ', 'ZZZZ']
-2025-10-28 11:46:03,145 Created model with the following terms:
-2025-10-28 11:46:03,145 {'IZZI', 'YXII', 'IIZY', 'IIXZ', 'IZYI', 'IIZZ', 'XZII', 'YIII', 'IIIZ', 'IXXI', 'YZII', 'IIZX', 'IZII', 'ZXII', 'IIYI', 'ZIII', 'IXZI', 'IIXI', 'IXII', 'ZYII', 'IIYX', 'IIYY', 'IYII', 'IIYZ', 'XIII', 'XXII', 'ZZII', 'IYYI', 'IIXY', 'IYZI', 'IZXI', 'YYII', 'IIIX', 'IIXX', 'IIZI', 'IYXI', 'IXYI', 'XYII', 'IIIY'}
-2025-10-28 11:46:03,167 Chose single bases:
-2025-10-28 11:46:03,167 ['IXXI', 'IZYI', 'IZZI', 'IYYI', 'IIYI', 'IYZI']
-2025-10-28 11:46:03,185 Chose single bases:
-2025-10-28 11:46:03,185 ['YYYY', 'XXXY', 'XYYZ', 'YZZI', 'ZIXX', 'YXYX']
-2025-10-28 11:46:03,198 Chose single bases:
-2025-10-28 11:46:03,198 ['IXXI', 'IZYI', 'IZZI', 'IYYI', 'IIYI', 'IYZI']
-2025-10-28 11:46:09,138 Created experiment consisting of 1950 instances
-2025-10-28 11:46:09,154 Chose single bases:
-2025-10-28 11:46:09,154 ['YYYY', 'XXXY', 'XYYZ', 'YZZI', 'ZIXX', 'YXYX']
-2025-10-28 11:46:14,508 Created experiment consisting of 1950 instances
-2025-10-28 11:46:53,813 Single-depth measurement produced fidelity greater than one: IXXI,IIXI
-2025-10-28 11:46:53,813 Product fidelity: 0.9480430492981787
-2025-10-28 11:46:53,813 Single fidelity: 0.8522147465873918
-2025-10-28 11:46:53,813 Single-depth measurement produced fidelity greater than one: IZZI,IZII
-2025-10-28 11:46:53,813 Product fidelity: 0.985010953545316
-2025-10-28 11:46:53,813 Single fidelity: 0.9375966587377104
-2025-10-28 11:46:53,813 Single-depth measurement produced fidelity greater than one: IYYI,IZXI
-2025-10-28 11:46:53,813 Product fidelity: 0.942638427691331
-2025-10-28 11:46:53,813 Single fidelity: 0.840974906779489
-2025-10-28 11:46:53,813 Single-depth measurement produced fidelity greater than one: IYZI,IYII
-2025-10-28 11:46:53,813 Product fidelity: 0.9820111981457359
-2025-10-28 11:46:53,813 Single fidelity: 0.944903609108672
-2025-10-28 11:46:53,813 Fit noise model with following fidelities:
-2025-10-28 11:46:53,813 [np.float64(0.9702465786042527), np.float64(0.9656840545206374), np.float64(0.9320714952113234), np.float64(0.9328205130396826), np.float64(0.9544343614650254), np.float64(0.9797475219272183), np.float64(0.9701624611384422), np.float64(0.9812773181679885), np.float64(0.9888774030944397), np.float64(0.8987856233225889), np.float64(0.9693779713487167), np.float64(0.9371596625491919), np.float64(1.0035779797652675), np.float64(0.9745827037798213), np.float64(1.0037002738318572), np.float64(0.9870783731017984), np.float64(0.9770457347283243), np.float64(0.9971146873644332), np.float64(0.9849740828236171), np.float64(0.9694164751314888), np.float64(0.8947711985467729), np.float64(0.8935026575626008), np.float64(0.9921483835568325), np.float64(0.9338937815088808), np.float64(0.9838538600063553), np.float64(0.9688822811038211), np.float64(0.9733045585500183), np.float64(0.8885672053603847), np.float64(0.8899887981412923), np.float64(0.9643459932836238), np.float64(0.9889573266194229), np.float64(0.9631780271508111), np.float64(0.9464724757237335), np.float64(0.8910724869445549), np.float64(0.9896694757471609), np.float64(0.9370790123050722), np.float64(0.896613930424275), np.float64(0.9604614638858692), np.float64(0.943594705993928)]
-2025-10-28 11:46:53,855 Fit noise model with following fidelities:
-2025-10-28 11:46:53,855 [np.float64(0.9788488866904921), np.float64(0.9552099662120126), np.float64(0.9435665222515653), np.float64(0.9797389011231241), np.float64(0.9781332049411591), np.float64(0.984492499022792), np.float64(0.9708843246981312), np.float64(0.9788482944324792), np.float64(0.988432795099903), np.float64(0.9463056648113347), np.float64(0.9740600605178612), np.float64(0.9389401708518225), np.float64(0.9920880022405038), np.float64(0.9565424111800419), np.float64(0.9892709079100608), np.float64(0.9941800123704606), np.float64(0.9418711072691441), np.float64(0.9905299131540042), np.float64(0.9615447791420934), np.float64(0.9457318878477194), np.float64(0.9237998957975898), np.float64(0.9242873146562589), np.float64(0.9577292254756119), np.float64(0.9804183496972501), np.float64(0.9793678896292808), np.float64(0.9495337651930676), np.float64(0.9854915047150996), np.float64(0.9381084306524037), np.float64(0.9264855911352534), np.float64(0.9401851583695361), np.float64(0.9827345153170465), np.float64(0.9446929655943476), np.float64(0.9418385565160631), np.float64(0.9283766509539447), np.float64(0.9896525977995778), np.float64(0.9444056045025799), np.float64(0.9409178313350743), np.float64(0.9482045760266288), np.float64(0.9422156843588039)]
+2026-01-06 17:18:17,987 Generated layer profile with 1 layers:
+2026-01-06 17:18:17,987 ['(\'cx\', (<Qubit register=(2, "q"), index=0>, <Qubit register=(2, "q"), index=1>))']
+2026-01-06 17:18:17,987 Created pauli bases
+2026-01-06 17:18:17,987 ['XX', 'YX', 'ZX', 'XY', 'YY', 'ZY', 'XZ', 'YZ', 'ZZ']
+2026-01-06 17:18:17,987 Created model with the following terms:
+2026-01-06 17:18:17,987 {'ZY', 'IY', 'YI', 'ZZ', 'ZX', 'IX', 'XX', 'YY', 'ZI', 'XI', 'IZ', 'YX', 'YZ', 'XY', 'XZ'}
+2026-01-06 17:19:02,078 Chose single bases:
+2026-01-06 17:19:02,078 ['XY', 'YI', 'ZZ', 'ZY', 'XX', 'YY']
+2026-01-06 17:19:02,086 Chose single bases:
+2026-01-06 17:19:02,086 ['XY', 'YI', 'ZZ', 'ZY', 'XX', 'YY']
+2026-01-06 17:19:08,479 Created experiment consisting of 1464 instances
+2026-01-06 17:19:59,065 Experiment results saved to SaveFiles/experiment_results_20260106_171959.json
+2026-01-06 17:19:59,065 Saved 1464 instance results
+2026-01-06 17:19:59,065 Results automatically saved to SaveFiles/experiment_results_20260106_171959.json
+2026-01-06 17:20:05,517 Fit noise model with following fidelities:
+2026-01-06 17:20:05,517 [np.float64(0.9609743500210286), np.float64(0.960165620780271), np.float64(0.999783202592911), np.float64(0.9869731112467054), np.float64(0.9497546644763287), np.float64(0.9530014672851044), np.float64(0.9811184449072468), np.float64(0.9795752256567016), np.float64(0.9973173018875802), np.float64(0.9954811233813935), np.float64(0.9954182256026726), np.float64(0.965580292544987), np.float64(0.9881583764085761), np.float64(0.9734059179295788), np.float64(0.9908286886736574)]
+2026-01-06 17:21:46,043 Fit noise model with following fidelities:
+2026-01-06 17:21:46,043 [np.float64(0.9609743500205068), np.float64(0.960165620814753), np.float64(0.9997832025918719), np.float64(0.9869731112461306), np.float64(0.9497546646336915), np.float64(0.9530014674004883), np.float64(0.9811184447880087), np.float64(0.9795752254938793), np.float64(0.997317301887738), np.float64(0.9954811233805351), np.float64(0.9954182256027087), np.float64(0.9655802925445166), np.float64(0.988158376410322), np.float64(0.973405917894358), np.float64(0.9908286886736577)]
+2026-01-06 17:22:01,770 Fit noise model with following fidelities:
+2026-01-06 17:22:01,770 [np.float64(0.960974350020507), np.float64(0.9601656207847362), np.float64(0.9997832025789666), np.float64(0.9869731112435932), np.float64(0.9497546646319458), np.float64(0.9530014673474982), np.float64(0.9811184448439063), np.float64(0.9795752254964155), np.float64(0.9973173018907583), np.float64(0.9954811233796604), np.float64(0.99541822560268), np.float64(0.9655802925369182), np.float64(0.9881583764223499), np.float64(0.9734059179257082), np.float64(0.9908286886736577)]
+2026-01-06 17:22:12,198 Fit noise model with following fidelities:
+2026-01-06 17:22:12,198 [np.float64(0.9609743500205069), np.float64(0.960165620779872), np.float64(0.9997832025918794), np.float64(0.9869731112492085), np.float64(0.9497546644750995), np.float64(0.9530014672843559), np.float64(0.9811184449049462), np.float64(0.9795752256579695), np.float64(0.997317301883943), np.float64(0.9954811233807352), np.float64(0.9954182256026369), np.float64(0.9655802925509781), np.float64(0.9881583764138224), np.float64(0.9734059179264198), np.float64(0.9908286886736574)]
