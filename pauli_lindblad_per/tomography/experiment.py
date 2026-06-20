@@ -307,13 +307,6 @@ class SparsePauliTomographyExperiment:
         return False
 
     def count_tomography_runs(self, depths: Iterable[int],samples: int, single_samples: int, shots: Optional[int] = None):
-        """
-        Returns:
-            dict mit:
-            - "circuits": Anzahl der erzeugten Circuits
-            - "backend_runs": (nur wenn shots übergeben) circuits * shots
-            - "details": kleine Aufschlüsselung
-        """
 
         num_layers = len(self._profiles)
 
