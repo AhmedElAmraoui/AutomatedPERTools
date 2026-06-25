@@ -3,13 +3,12 @@ import sys
 sys.path.append('../..')
 import numpy as np
 
-topology = np.array([[0, 0], [1, 0], [1, 1], [0, 1]])
-
 from src.VQE_functions import optimize_energy, MFIM_Hamiltonian, build_hva_layers
 from scipy.linalg import eigh
 from qiskit_aer import AerSimulator
-from qiskit.quantum_info import Statevector, SparsePauliOp
-
+from qiskit.quantum_info import Statevector, SparsePauliOp, Pauli
+import random
+from itertools import product, cycle, permutations
 
 
 def circuit_to_layers(qc):
@@ -73,15 +72,6 @@ def layers_with_barriers(qc, layers):
 
     return out
 
-layers = circuit_to_layers(qc_bound)
-
-qc_layers = layers_with_barriers(qc_bound, layers)
-
-print(qc_layers.draw(fold=-1))
-
-
-import random
-from qiskit.quantum_info import Pauli
 
 PAULIS = ["I", "X", "Y", "Z"]
 
@@ -113,8 +103,6 @@ def extract_two_qubit_structure(layer):
             structure.append((inst.operation, q1, q2))
 
     return structure
-
-
 
 def conjugate_pauli_2q(pauli_string, layer):
     p = Pauli(pauli_string)
@@ -174,17 +162,6 @@ def pauli_twirl_layers(qc, layers, num_samples=1):
 
     return twirled
 
-
-N=100
-twirled_layers = pauli_twirl_layers(qc_bound, layers, num_samples=N)
-
-print("One twirled sample:")
-print(twirled_layers["layer0"][0].draw(fold=-1))
-
-
-
-from itertools import product, cycle, permutations
-
 PAULIS_1Q = ["X", "Y", "Z"]
 PAULIS_2Q = list(product(["X", "Y", "Z"], repeat=2))
 
@@ -221,69 +198,59 @@ def build_pauli_lindblad_terms(qc, backend, phys_qubits=None):
 
     return terms
 
-from qiskit_ibm_runtime.fake_provider import FakeWashingtonV2
-from qiskit_aer import AerSimulator
-from qiskit_aer.noise import NoiseModel
-
-fake_backend = FakeWashingtonV2()
-noise_model = NoiseModel.from_backend(fake_backend)
-backend_noisy = AerSimulator(noise_model=noise_model)
-
-phys_qubits = [3,4,5,15]
-
-model_terms = build_pauli_lindblad_terms(qc_bound, fake_backend, phys_qubits)
-print(f"Number of model terms: {len(model_terms)}")
 
 
-NUM_BASES = 9
 
-bases = [['I']*num_qubits for i in range(NUM_BASES)]
-connectivity = fake_backend.coupling_map.graph.subgraph(phys_qubits)
+def get_measurement_bases(num_qubits, connectivity):
+    for vertex in range(num_qubits):
+        #copied from Fig. S3 in van den Berg
+        orderings = {"XXXYYYZZZ":"XYZXYZXYZ",
+                            "XXXYYZZZY":"XYZXYZXYZ",
+                            "XXYYYZZZX":"XYZXYZXYZ",
+                            "XXZYYZXYZ":"XYZXZYZYX",
+                            "XYZXYZXYZ":"XYZZXYYZX"}
+        
+        NUM_BASES = 9
 
-for vertex in range(num_qubits):
-    #copied from Fig. S3 in van den Berg
-    orderings = {"XXXYYYZZZ":"XYZXYZXYZ",
-                        "XXXYYZZZY":"XYZXYZXYZ",
-                        "XXYYYZZZX":"XYZXYZXYZ",
-                        "XXZYYZXYZ":"XYZXZYZYX",
-                        "XYZXYZXYZ":"XYZZXYYZX"}
-    
-    children = connectivity.neighbors(vertex)
-    predecessors = [c for c in children if c < vertex]
+        bases = [['I']*num_qubits for i in range(NUM_BASES)]
+        
+        children = connectivity.neighbors(vertex)
+        predecessors = [c for c in children if c < vertex]
 
-    match len(predecessors):
-        #trivial if no predecessors
-        case 0:
-            cycp = cycle("XYZ")
-            for i,_ in enumerate(bases):
-                bases[i][vertex] = next(cycp)
-        #Choose p1:"XXXYYYZZZ" and p2:"XYZXYZXYZ" if one predecessor
-        case 1:
-            pred, = predecessors
-            #store permutation of indices so that predecessor has X,X,X,Y,Y,Y,Z,Z,Z
-            _,bases = list(zip(*sorted(zip([p[pred] for p in bases], bases))))
-            cycp = cycle("XYZ")
-            for i,_ in enumerate(bases):
-                bases[i][vertex] = next(cycp)
-        case 2:
-            pred0,pred1 = predecessors
-            _,bases = list(zip(*sorted(zip([p[pred0] for p in bases], bases))))
-            #list out string with permuted values of predecessor 2
-            substr = [p[pred0] for p in bases]
-            #match predecessor two with a permutation of example_orderings
-            reordering = ""
-            for perm in permutations("XYZ"):
-                substr = "".join(["XYZ"[perm.index(p)] for p in substr])
-                if substr in orderings:
-                    current = orderings[substr] 
-                    for i,p in enumerate(current):
-                        bases[i][vertex] = p
-                    break
-        case _: #processor needs to have connectivity so that there are <= 2 predecessors
-            raise Exception("Three or more predecessors encountered")
-
-print("Measurement bases:", ["".join(b) for b in bases])
-bases = [Pauli("".join(string[::-1])) for string in bases]
+        match len(predecessors):
+            #trivial if no predecessors
+            case 0:
+                cycp = cycle("XYZ")
+                for i,_ in enumerate(bases):
+                    bases[i][vertex] = next(cycp)
+            #Choose p1:"XXXYYYZZZ" and p2:"XYZXYZXYZ" if one predecessor
+            case 1:
+                pred, = predecessors
+                #store permutation of indices so that predecessor has X,X,X,Y,Y,Y,Z,Z,Z
+                _,bases = list(zip(*sorted(zip([p[pred] for p in bases], bases))))
+                cycp = cycle("XYZ")
+                for i,_ in enumerate(bases):
+                    bases[i][vertex] = next(cycp)
+            case 2:
+                pred0,pred1 = predecessors
+                _,bases = list(zip(*sorted(zip([p[pred0] for p in bases], bases))))
+                #list out string with permuted values of predecessor 2
+                substr = [p[pred0] for p in bases]
+                #match predecessor two with a permutation of example_orderings
+                reordering = ""
+                for perm in permutations("XYZ"):
+                    substr = "".join(["XYZ"[perm.index(p)] for p in substr])
+                    if substr in orderings:
+                        current = orderings[substr] 
+                        for i,p in enumerate(current):
+                            bases[i][vertex] = p
+                        break
+            case _: #processor needs to have connectivity so that there are <= 2 predecessors
+                raise Exception("Three or more predecessors encountered")
+            
+        bases = [Pauli("".join(string[::-1])) for string in bases]
+            
+    return bases
 
 
 def get_expectation(pauli, counts):
@@ -578,20 +545,7 @@ def run_tomography_all_layers(layers, depths, n_samples, sampler,
     return tomo
 
 
-DEPTHS_TOMO    = [1, 2, 4, 8, 16]
-N_SAMPLES_TOMO = 30           # twirl samples per (depth, basis)
 
-print('Running tomography for all layers...')
-tomo_results = run_tomography_all_layers(
-    layers, DEPTHS_TOMO, N_SAMPLES_TOMO,
-    sampler, model_terms, groups, measurement_bases
-)
-print('Tomography complete.')
-
-layer_deg_pairs = {}
-for ell, layer in enumerate(layers):
-    layer_deg_pairs[ell] = find_degenerate_pairs(model_terms, layer)
-    print(f'Layer {ell}: {len(layer_deg_pairs[ell])} degenerate pairs')
 
 
 def fit_exponential(depths_arr, expvals):
@@ -678,18 +632,6 @@ def fit_fidelities_for_layer(tomo_result, depths, deg_pairs):
     return fidelities, spams
 
 
-layer_fidelities = {}
-layer_spams      = {}
-for ell in range(len(layers)):
-    fid, spam = fit_fidelities_for_layer(
-        tomo_results[ell], DEPTHS_TOMO, layer_deg_pairs[ell]
-    )
-    layer_fidelities[ell] = fid
-    layer_spams[ell]      = spam
-    vals = list(fid.values())
-    print(f'Layer {ell}: {len(fid)} fidelities  '
-          f'min={min(vals):.3f}  max={max(vals):.3f}  '
-          f'mean={np.mean(vals):.3f}')
 
 
 def plot_fidelity_curves(tomo_result, fidelities, spams, depths, deg_pairs,
@@ -991,7 +933,11 @@ opt_params, energy, HelperInfo = optimize_energy(initial_params=initial_params, 
 values = {p: v for p, v in zip(params, opt_params)}
 qc_bound = hva_layers.assign_parameters(values)
 
-print(qc_bound.draw(fold=-1))
+layers = circuit_to_layers(qc_bound)
+
+qc_layers = layers_with_barriers(qc_bound, layers)
+
+print(qc_layers.draw(fold=-1))
 
 exact_energy = np.min(eigh(Hamiltonian.to_matrix(), eigvals_only=True))
 
@@ -1007,18 +953,56 @@ print("Relative error: ", np.abs(energy - exact_energy) / np.abs(exact_energy) *
 print("Initial parameters: ",initial_params)
 print("Optimal parameters: ", opt_params)
 
+N=100
+twirled_layers = pauli_twirl_layers(qc_bound, layers, num_samples=N)
 
 
+from qiskit_ibm_runtime.fake_provider import FakeWashingtonV2
+from qiskit_aer import AerSimulator
+from qiskit_aer.noise import NoiseModel
+
+fake_backend  = FakeWashingtonV2()
+noise_model   = NoiseModel.from_backend(fake_backend)
+backend_noisy = AerSimulator(noise_model=noise_model)
+
+phys_qubits = [3,4,5,15]
+
+model_terms = build_pauli_lindblad_terms(qc_bound, fake_backend, phys_qubits)
+print(f"Number of model terms: {len(model_terms)}")
+
+connectivity = fake_backend.coupling_map.graph.subgraph(phys_qubits)
+
+bases = get_measurement_bases(num_qubits, connectivity)
 
 
+DEPTHS_TOMO    = [1, 2, 4, 8, 16]
+N_SAMPLES_TOMO = 30           # twirl samples per (depth, basis)
+
+print('Running tomography for all layers...')
+tomo_results = run_tomography_all_layers(
+    layers, DEPTHS_TOMO, N_SAMPLES_TOMO,
+    sampler, model_terms, groups, measurement_bases
+)
+print('Tomography complete.')
+
+layer_deg_pairs = {}
+for ell, layer in enumerate(layers):
+    layer_deg_pairs[ell] = find_degenerate_pairs(model_terms, layer)
+    print(f'Layer {ell}: {len(layer_deg_pairs[ell])} degenerate pairs')
 
 
-
-
-
-
-
-
+layer_fidelities = {}
+layer_spams      = {}
+for ell in range(len(layers)):
+    fid, spam = fit_fidelities_for_layer(
+        tomo_results[ell], DEPTHS_TOMO, layer_deg_pairs[ell]
+    )
+    layer_fidelities[ell] = fid
+    layer_spams[ell]      = spam
+    vals = list(fid.values())
+    print(f'Layer {ell}: {len(fid)} fidelities  '
+          f'min={min(vals):.3f}  max={max(vals):.3f}  '
+          f'mean={np.mean(vals):.3f}')
 
 
 NOISE_STRENGTHS = [0.25, 0.50, 0.75, 1.0]
